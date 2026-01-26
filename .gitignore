@@ -31,3 +31,17 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
+
+
+
+# OS
+.DS_Store
+
+
+
