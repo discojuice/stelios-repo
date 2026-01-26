@@ -1,0 +1,77 @@
+<h1>Library CRUD</h1>
+
+<hr />
+
+<h2>Authors</h2>
+
+
+<button type="button" (click)="loadAuthors(); $event.preventDefault()">Load Authors</button>
+
+
+<div style="margin-top: 10px;">
+  <input placeholder="Author name" [(ngModel)]="authorForm.name" />
+  <button (click)="saveAuthor()">
+    {{ authorEditingId === null ? 'Create Author' : 'Update Author' }}
+  </button>
+  <button *ngIf="authorEditingId !== null" (click)="cancelAuthorEdit()">Cancel</button>
+</div>
+
+<ul>
+  <li *ngFor="let a of authors">
+    <b>{{ a.id }}</b> - {{ a.name }}
+    <button (click)="editAuthor(a)">Edit</button>
+    <button (click)="deleteAuthor(a.id!)">Delete</button>
+  </li>
+</ul>
+
+<hr />
+
+<h2>Books</h2>
+
+<button (click)="loadBooks()">Load Books</button>
+
+<div style="margin-top: 10px;">
+  <input placeholder="Book title" [(ngModel)]="bookForm.title" />
+
+  <select [(ngModel)]="bookForm.authorId">
+    <option [ngValue]="null">-- choose author --</option>
+    <option *ngFor="let a of authors" [ngValue]="a.id">{{ a.name }}</option>
+  </select>
+
+  <button (click)="saveBook()">
+    {{ bookEditingId === null ? 'Create Book' : 'Update Book' }}
+  </button>
+  <button *ngIf="bookEditingId !== null" (click)="cancelBookEdit()">Cancel</button>
+
+  <p style="font-size: 0.9em;">
+    Tip: click "Load Authors" first so the author dropdown is filled.
+  </p>
+</div>
+
+<table border="1" cellpadding="6" style="margin-top: 10px;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let b of books">
+      <td>{{ b.id }}</td>
+      <td>{{ b.title }}</td>
+      <td>{{ b.authorName }} (id: {{ b.authorId }})</td>
+      <td>
+        <button (click)="editBook(b)">Edit</button>
+        <button (click)="deleteBook(b.id!)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p style="color: #666;">
+  Backend: http://localhost:8080 | Frontend: http://localhost:4200
+</p>
