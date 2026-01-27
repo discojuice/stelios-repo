@@ -38,7 +38,11 @@ frontend/dist/
 frontend/.angular/
 frontend/.cache/
 
-
+#H2 database files
+*.mv.db
+*.lock.db
+*.trade.db
+*.db
 
 # OS
 .DS_Store
