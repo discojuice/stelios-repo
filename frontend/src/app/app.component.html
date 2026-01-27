@@ -5,7 +5,7 @@
 <h2>Authors</h2>
 
 
-<button type="button" (click)="loadAuthors(); $event.preventDefault()">Load Authors</button>
+<button type="button" (click)="loadAuthors()">Load Authors</button>
 
 
 <div style="margin-top: 10px;">
@@ -34,7 +34,7 @@
   <input placeholder="Book title" [(ngModel)]="bookForm.title" />
 
   <select [(ngModel)]="bookForm.authorId">
-    <option [ngValue]="null">-- choose author --</option>
+    <!-- <option [ngValue]="null">-- choose author --</option> -->
     <option *ngFor="let a of authors" [ngValue]="a.id">{{ a.name }}</option>
   </select>
 

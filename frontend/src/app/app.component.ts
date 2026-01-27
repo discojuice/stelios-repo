@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+
+
 
 type Author = { id?: number; name: string };
 type Book = { id?: number; title: string; authorId: number; authorName: string };
@@ -14,9 +16,10 @@ type BookRequest = { title: string; authorId: number | null };
   templateUrl: './app.component.html',
 })
 
+
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.loadAuthors();
+    // this.loadAuthors();
   }
 
   private authorsUrl = 'http://localhost:8080/api/authors';
@@ -31,15 +34,14 @@ export class AppComponent implements OnInit {
   bookForm: BookRequest = { title: '', authorId: null };
   bookEditingId: number | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   loadAuthors() {
-    // this.http.get<Author[]>(this.authorsUrl).subscribe(r => this.authors = r);
-
   console.log('clicked loadAuthors');
   this.http.get<Author[]>(this.authorsUrl).subscribe(data => {
     console.log('response', data);
     this.authors = [...data];
+    this.cdr.detectChanges(); // ✅ forces UI update immediately
   });
 }
 
@@ -75,9 +77,18 @@ export class AppComponent implements OnInit {
     this.http.delete(`${this.authorsUrl}/${id}`).subscribe(() => this.loadAuthors());
   }
 
+  // loadBooks() {
+  //   this.http.get<Book[]>(this.booksUrl).subscribe(r => this.books = r);
+  // }
+
   loadBooks() {
-    this.http.get<Book[]>(this.booksUrl).subscribe(r => this.books = r);
-  }
+  console.log('clicked loadAuthors');
+  this.http.get<Book[]>(this.booksUrl).subscribe(data => {
+    console.log('response', data);
+    this.books = [...data];
+    this.cdr.detectChanges(); // ✅ forces UI update immediately
+  });
+}
 
   saveBook() {
     if (!this.bookForm.title || this.bookForm.authorId === null) return;
