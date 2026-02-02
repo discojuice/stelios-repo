@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.AuthorDto;
 import com.example.demo.entity.Author;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,25 +28,41 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDto create(AuthorDto input) {
+        if (input == null || input.name == null || input.name.trim().isEmpty()) {
+            throw new BadRequestException("Author name is required");
+        }
+
         Author a = new Author();
-        a.setName(input.name);
+        a.setName(input.name.trim());
         return toDto(authorRepo.save(a));
     }
 
     @Override
     public AuthorDto update(Long id, AuthorDto input) {
-        return authorRepo.findById(id)
-                .map(existing -> {
-                    existing.setName(input.name);
-                    return toDto(authorRepo.save(existing));
-                })
-                .orElse(null);
+        if (id == null) {
+            throw new BadRequestException("Author id is required");
+        }
+        if (input == null || input.name == null || input.name.trim().isEmpty()) {
+            throw new BadRequestException("Author name is required");
+        }
+
+        Author existing = authorRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Author not found: " + id));
+
+        existing.setName(input.name.trim());
+        return toDto(authorRepo.save(existing));
     }
 
     @Override
     public boolean delete(Long id) {
-        if (!authorRepo.existsById(id)) return false;
-        authorRepo.deleteById(id);
+        if (id == null) {
+            throw new BadRequestException("Author id is required");
+        }
+
+        Author existing = authorRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Author not found: " + id));
+
+        authorRepo.delete(existing);
         return true;
     }
 

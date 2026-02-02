@@ -4,6 +4,8 @@ import com.example.demo.dto.BookCreateUpdateRequest;
 import com.example.demo.dto.BookDto;
 import com.example.demo.entity.Author;
 import com.example.demo.entity.Book;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -31,13 +33,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto create(BookCreateUpdateRequest req) {
-        if (req == null || req.title == null || req.title.isBlank() || req.authorId == null) return null;
+        validateRequest(req);
 
-        Author author = authorRepo.findById(req.authorId).orElse(null);
-        if (author == null) return null;
+        Author author = authorRepo.findById(req.authorId)
+                .orElseThrow(() -> new NotFoundException("Author not found: " + req.authorId));
 
         Book b = new Book();
-        b.setTitle(req.title);
+        b.setTitle(req.title.trim());
         b.setAuthor(author);
 
         return toDto(bookRepo.save(b));
@@ -45,26 +47,46 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(Long id, BookCreateUpdateRequest req) {
-        return bookRepo.findById(id).map(existing -> {
-            if (req.title != null && !req.title.isBlank()) {
-                existing.setTitle(req.title);
-            }
+        if (id == null) {
+            throw new BadRequestException("Book id is required");
+        }
+        validateRequest(req);
 
-            if (req.authorId != null) {
-                Author author = authorRepo.findById(req.authorId).orElse(null);
-                if (author == null) return null; // invalid authorId
-                existing.setAuthor(author);
-            }
+        Book existing = bookRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Book not found: " + id));
 
-            return toDto(bookRepo.save(existing));
-        }).orElse(null);
+        Author author = authorRepo.findById(req.authorId)
+                .orElseThrow(() -> new NotFoundException("Author not found: " + req.authorId));
+
+        existing.setTitle(req.title.trim());
+        existing.setAuthor(author);
+
+        return toDto(bookRepo.save(existing));
     }
 
     @Override
     public boolean delete(Long id) {
-        if (!bookRepo.existsById(id)) return false;
-        bookRepo.deleteById(id);
+        if (id == null) {
+            throw new BadRequestException("Book id is required");
+        }
+
+        Book existing = bookRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Book not found: " + id));
+
+        bookRepo.delete(existing);
         return true;
+    }
+
+    private void validateRequest(BookCreateUpdateRequest req) {
+        if (req == null) {
+            throw new BadRequestException("Request body is required");
+        }
+        if (req.title == null || req.title.trim().isEmpty()) {
+            throw new BadRequestException("Title is required");
+        }
+        if (req.authorId == null) {
+            throw new BadRequestException("authorId is required");
+        }
     }
 
     private BookDto toDto(Book b) {

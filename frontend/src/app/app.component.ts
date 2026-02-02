@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-
-
 type Author = { id?: number; name: string };
 type Book = { id?: number; title: string; authorId: number; authorName: string };
 type BookRequest = { title: string; authorId: number | null };
@@ -19,8 +17,14 @@ type BookRequest = { title: string; authorId: number | null };
 
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    // this.loadAuthors();
+    this.loadAuthors();
+    this.loadBooks();
   }
+
+ activeTab: 'home' | 'authors' | 'books' | 'about' = 'home';
+
+authorSearch = '';
+bookSearch = '';
 
   private authorsUrl = 'http://localhost:8080/api/authors';
   private booksUrl = 'http://localhost:8080/api/books';
@@ -45,8 +49,6 @@ export class AppComponent implements OnInit {
   });
 }
 
-  
-
   saveAuthor() {
     if (!this.authorForm.name.trim()) return;
 
@@ -61,6 +63,21 @@ export class AppComponent implements OnInit {
 
     this.cancelAuthorEdit();
   }
+
+  filteredAuthors(): Author[] {
+  const q = this.authorSearch.trim().toLowerCase();
+  if (!q) return this.authors;
+  return this.authors.filter(a => (a.name ?? '').toLowerCase().includes(q));
+}
+
+filteredBooks(): Book[] {
+  const q = this.bookSearch.trim().toLowerCase();
+  if (!q) return this.books;
+  return this.books.filter(b =>
+    (b.title ?? '').toLowerCase().includes(q) ||
+    (b.authorName ?? '').toLowerCase().includes(q)
+  );
+}
 
   editAuthor(a: Author) {
     this.authorEditingId = a.id ?? null;
@@ -77,9 +94,6 @@ export class AppComponent implements OnInit {
     this.http.delete(`${this.authorsUrl}/${id}`).subscribe(() => this.loadAuthors());
   }
 
-  // loadBooks() {
-  //   this.http.get<Book[]>(this.booksUrl).subscribe(r => this.books = r);
-  // }
 
   loadBooks() {
   console.log('clicked loadAuthors');
