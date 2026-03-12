@@ -44,7 +44,7 @@
         <button class="ghost-btn" (click)="loadRequests()">Load Requests</button>
       </div>
 
-      <div class="panel">
+      <!-- <div class="panel">
         <div class="form-row">
           <input
             type="text"
@@ -74,9 +74,9 @@
         <div class="tip">
           Tip: search by id, question or answer, then edit or delete from the table.
         </div>
-      </div>
+      </div> -->
 
-      <div class="panel">
+      <!-- <div class="panel">
         <div class="form-row">
           <input
             type="text"
@@ -96,11 +96,10 @@
             [(ngModel)]="searchAnswer"
           />
 
-          <button class="main-btn" (click)="searchRequests()">Search</button>
-          <button type="button" class="main-btn" (click)="searchRequests()">Search2</button>
-          <button class="ghost-btn" (click)="resetSearch()">Reset</button>
-        </div>
-      </div>
+          <button type="button" class="main-btn" (click)="searchRequests()">Search</button>
+          <button type="button" class="ghost-btn" (click)="resetSearch()">Reset</button>
+        </div> 
+      </div> -->
 
       <div *ngIf="message" class="message success">{{ message }}</div>
       <div *ngIf="error" class="message error">{{ error }}</div>
@@ -192,8 +191,10 @@
             [(ngModel)]="searchAnswer"
           />
 
-          <button class="main-btn" (click)="searchRequests()">Search</button>
-          <button class="ghost-btn" (click)="resetSearch()">Reset</button>
+          <!-- <button class="main-btn" (click)="searchRequests()">Search</button> -->
+          <button type="button" class="main-btn" (click)="searchRequests()">Search</button>
+          <!-- <button class="ghost-btn" (click)="resetSearch()">Reset</button> -->
+          <button type="button" class="ghost-btn" (click)="resetSearch()">Reset</button>
         </div>
       </div>
 
