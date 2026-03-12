@@ -1,287 +1,254 @@
+<!-- <tr *ngFor="let r of requests">
+  <td>{{ r.id }}</td>
+  <td>{{ r.question }}</td>
+  <td>{{ r.answer }}</td>
+  <td>
+    <button class="small-btn" (click)="editRequest(r)">Edit</button>
+    <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
+  </td>
+</tr> -->
 
-<div class="appShell">
+<tr *ngIf="requests.length === 0">
+  <td colspan="4" class="empty-row">No requests found.</td>
+</tr>
 
-  <header class="topbar">
-  <div class="brand">
-    <span class="logo">📚</span>
-    <span class="brandText">Library</span>
-  </div>
-</header>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">SNOW requests</div>
 
+    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome()">
+      Home
+    </button>
 
-  <div class="layout">
-    <!-- Left sidebar -->
-    <aside class="sidebar">
-      <button type="button" class="navItem" [class.active]="activeTab==='home'" (click)="activeTab='home'">
-        🏠 <span>Home</span>
-      </button>
-      <button type="button" class="navItem" [class.active]="activeTab==='authors'" (click)="activeTab='authors'">
-        👤 <span>Authors</span>
-      </button>
-      <button type="button" class="navItem" [class.active]="activeTab==='books'" (click)="activeTab='books'">
-        📖 <span>Books</span>
-      </button>
-      <button type="button" class="navItem" [class.active]="activeTab==='about'" (click)="activeTab='about'">
-        📘 <span>API Docs</span>
-      </button>
+    <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
+      Requests
+    </button>
 
-      <div class="sidebarDivider"></div>
+    <button class="menu-btn" [class.active]="activePage === 'docs'" (click)="goToDocs()">
+      API Docs
+    </button>
 
-      <div class="smallMuted">
-        Backend: <b>http://localhost:8080</b><br />
-        Frontend: <b>http://localhost:4200</b>
+    <div class="sidebar-info">
+      <div><b>Backend:</b> http://localhost:8080</div>
+      <div><b>Frontend:</b> http://localhost:4200</div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- HOME PAGE -->
+    <section *ngIf="activePage === 'home'">
+      <div class="page-title">Requests</div>
+
+      <div class="top-actions">
+        <button class="ghost-btn" (click)="loadRequests()">Load Requests</button>
       </div>
-    </aside>
 
-    <!-- Main content -->
-    <main class="content">
+      <div class="panel">
+        <div class="form-row">
+          <input
+            type="text"
+            placeholder="Question"
+            [(ngModel)]="form.question"
+          />
 
-      <!-- HOME -->
-      <section *ngIf="activeTab==='home'">
-        <div class="hero">
-          <div class="heroText">
-            <h1>Welcome to Library</h1>
-            <p>
-              A simple web app where you can manage authors and books,
-              and search/filter the data.
-            </p>
+          <input
+            type="text"
+            placeholder="Answer"
+            [(ngModel)]="form.answer"
+          />
 
-          
-          </div>
+          <button class="main-btn" *ngIf="editingId === null" (click)="createRequest()">
+            Create Request
+          </button>
 
-        
+          <button class="main-btn" *ngIf="editingId !== null" (click)="updateRequest()">
+            Update Request
+          </button>
+
+          <button class="ghost-btn" *ngIf="editingId !== null" (click)="cancelEdit()">
+            Cancel
+          </button>
         </div>
 
-    
-
-        <!-- <h2 class="sectionTitle">Quick Stats</h2> -->
-        <div class="cards2">
-          <div class="statCard">
-            <div class="statIcon">👤</div>
-            <div class="statNumber">{{ authors.length }}</div>
-            <div class="statLabel">Total Authors</div>
-            <button type="button" class="btn btnTiny" (click)="activeTab='authors'; loadAuthors()">View All</button>
-          </div>
-
-          <div class="statCard">
-            <div class="statIcon">📖</div>
-            <div class="statNumber">{{ books.length }}</div>
-            <div class="statLabel">Total Books</div>
-            <button type="button" class="btn btnTiny" (click)="activeTab='books'; loadBooks()">View All</button>
-          </div>
+        <div class="tip">
+          Tip: search by id, question or answer, then edit or delete from the table.
         </div>
-      </section>
+      </div>
 
-      <!-- AUTHORS -->
-      <section *ngIf="activeTab==='authors'">
-        <div class="pageHeader">
-          <h2>Authors</h2>
-          <div class="pageActions">
-            <button type="button" class="btn btnGhost" (click)="loadAuthors()">Load Authors</button>
-          </div>
+      <div class="panel">
+        <div class="form-row">
+          <input
+            type="text"
+            placeholder="Search by id"
+            [(ngModel)]="searchId"
+          />
+
+          <input
+            type="text"
+            placeholder="Search by question"
+            [(ngModel)]="searchQuestion"
+          />
+
+          <input
+            type="text"
+            placeholder="Search by answer"
+            [(ngModel)]="searchAnswer"
+          />
+
+          <button class="main-btn" (click)="searchRequests()">Search</button>
+          <button type="button" class="main-btn" (click)="searchRequests()">Search2</button>
+          <button class="ghost-btn" (click)="resetSearch()">Reset</button>
         </div>
+      </div>
 
-        <div class="panel">
-          <div class="row">
-            <input class="input" placeholder="Author name" [(ngModel)]="authorForm.name" />
+      <div *ngIf="message" class="message success">{{ message }}</div>
+      <div *ngIf="error" class="message error">{{ error }}</div>
 
-            <button type="button" class="btn btnPrimary" (click)="saveAuthor()">
-              {{ authorEditingId === null ? 'Create Author' : 'Update Author' }}
-            </button>
 
-            <button type="button" class="btn btnGhost" *ngIf="authorEditingId !== null" (click)="cancelAuthorEdit()">
-              Cancel
-            </button>
 
-            <span class="spacer"></span>
+      <div class="table-panel">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 90px;">ID</th>
+              <th>Question</th>
+              <th>Answer</th>
+              <th style="width: 180px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of requests">
+              <td>{{ r.id }}</td>
+              <td>{{ r.question }}</td>
+              <td>{{ r.answer }}</td>
+              <td>
+                <button class="small-btn" (click)="editRequest(r)">Edit</button>
+                <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
+              </td>
+            </tr>
 
-            <input class="input" placeholder="Search author..." [(ngModel)]="authorSearch" />
-          </div>
+            <tr *ngIf="requests.length === 0">
+              <td colspan="4" class="empty-row">No requests found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REQUESTS PAGE -->
+    <section *ngIf="activePage === 'requests'">
+      <div class="page-title">Requests</div>
+
+      <div class="top-actions">
+        <button class="ghost-btn" (click)="loadRequests()">Load Requests</button>
+      </div>
+
+      <div class="panel">
+        <div class="form-row">
+          <input
+            type="text"
+            placeholder="Question"
+            [(ngModel)]="form.question"
+          />
+
+          <input
+            type="text"
+            placeholder="Answer"
+            [(ngModel)]="form.answer"
+          />
+
+          <button class="main-btn" *ngIf="editingId === null" (click)="createRequest()">
+            Create Request
+          </button>
+
+          <button class="main-btn" *ngIf="editingId !== null" (click)="updateRequest()">
+            Update Request
+          </button>
+
+          <button class="ghost-btn" *ngIf="editingId !== null" (click)="cancelEdit()">
+            Cancel
+          </button>
         </div>
+      </div>
 
-        <div class="tableWrap">
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width:90px;">ID</th>
-                <th>Name</th>
-                <th style="width:220px;">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let a of filteredAuthors()">
-                <td><span class="pill">{{ a.id }}</span></td>
-                <td>{{ a.name }}</td>
-                <td>
-                  <button type="button" class="btn btnSmall" (click)="editAuthor(a)">Edit</button>
-                  <button type="button" class="btn btnSmall btnDanger" (click)="deleteAuthor(a.id!)">Delete</button>
-                </td>
-              </tr>
-              <tr *ngIf="filteredAuthors().length === 0">
-                <td colspan="3" class="empty">No authors found.</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="panel">
+        <div class="form-row">
+          <input
+            type="text"
+            placeholder="Search by id"
+            [(ngModel)]="searchId"
+          />
+
+          <input
+            type="text"
+            placeholder="Search by question"
+            [(ngModel)]="searchQuestion"
+          />
+
+          <input
+            type="text"
+            placeholder="Search by answer"
+            [(ngModel)]="searchAnswer"
+          />
+
+          <button class="main-btn" (click)="searchRequests()">Search</button>
+          <button class="ghost-btn" (click)="resetSearch()">Reset</button>
         </div>
-      </section>
+      </div>
 
-      <!-- BOOKS -->
-      <section *ngIf="activeTab==='books'">
-        <div class="pageHeader">
-          <h2>Books</h2>
-          <div class="pageActions">
-            <button type="button" class="btn btnGhost" (click)="loadBooks()">Load Books</button>
-            <button type="button" class="btn btnGhost" (click)="loadAuthors()">Refresh Authors</button>
-          </div>
-        </div>
+      <div *ngIf="message" class="message success">{{ message }}</div>
+      <div *ngIf="error" class="message error">{{ error }}</div>
 
-        <div class="panel">
-          <div class="row">
-            <input class="input" placeholder="Book title" [(ngModel)]="bookForm.title" />
+      <div class="table-panel">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 90px;">ID</th>
+              <th>Question</th>
+              <th>Answer</th>
+              <th style="width: 180px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of requests">
+              <td>{{ r.id }}</td>
+              <td>{{ r.question }}</td>
+              <td>{{ r.answer }}</td>
+              <td>
+                <button class="small-btn" (click)="editRequest(r)">Edit</button>
+                <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
+              </td>
+            </tr>
 
-            <select class="input" [(ngModel)]="bookForm.authorId">
-              <option [ngValue]="null">-- choose author --</option>
-              <option *ngFor="let a of authors" [ngValue]="a.id">{{ a.name }}</option>
-            </select>
+            <tr *ngIf="requests.length === 0">
+              <td colspan="4" class="empty-row">No requests found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-            <button type="button" class="btn btnPrimary" (click)="saveBook()">
-              {{ bookEditingId === null ? 'Create Book' : 'Update Book' }}
-            </button>
+    <!-- DOCS PAGE -->
+    <section *ngIf="activePage === 'docs'">
+      <div class="page-title">API Docs</div>
 
-            <button type="button" class="btn btnGhost" *ngIf="bookEditingId !== null" (click)="cancelBookEdit()">
-              Cancel
-            </button>
+      <div class="panel">
+        <p>Open Swagger UI:</p>
+        <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
+          http://localhost:8080/swagger-ui/index.html
+        </a>
 
-            <span class="spacer"></span>
+        <!-- <ul class="docs-list">
+          <li>GET /api/requests</li>
+          <li>GET /api/requests/{id}</li>
+          <li>GET /api/requests/search?question=...&answer=...</li>
+          <li>POST /api/requests</li>
+          <li>PUT /api/requests/{id}</li>
+          <li>DELETE /api/requests/{id}</li>
+        </ul> -->
+      </div>
+    </section>
 
-            <input class="input" placeholder="Search books..." [(ngModel)]="bookSearch" />
-          </div>
-
-          <p class="smallMuted" style="margin-top:10px;">
-            Tip: If the author dropdown is empty, click <b>Refresh Authors</b>.
-          </p>
-        </div>
-
-        <div class="tableWrap">
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width:90px;">ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th style="width:220px;">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let b of filteredBooks()">
-                <td><span class="pill">{{ b.id }}</span></td>
-                <td>{{ b.title }}</td>
-                <td>{{ b.authorName }} <span class="smallMuted">(id: {{ b.authorId }})</span></td>
-                <td>
-                  <button type="button" class="btn btnSmall" (click)="editBook(b)">Edit</button>
-                  <button type="button" class="btn btnSmall btnDanger" (click)="deleteBook(b.id!)">Delete</button>
-                </td>
-              </tr>
-              <tr *ngIf="filteredBooks().length === 0">
-                <td colspan="4" class="empty">No books found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ABOUT / API DOCS -->
-      <section *ngIf="activeTab==='about'">
-        <div class="panel">
-          <h2 style="margin-top:0;">API Docs</h2>
-          <p class="smallMuted">
-            This frontend calls a Spring Boot backend:
-          </p>
-          <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">  Open Swagger UI</a>
-          <ul class="list">
-            <li>
-              <b>GET</b>
-              <a href="http://localhost:8080/api/authors" target="_blank">
-                /api/authors
-              </a>
-            </li>
-            <li><b>GET</b> /api/authors</li>
-            <li><b>POST</b> /api/authors</li>
-            <li><b>PUT</b> /api/authors/&#123;id&#125;</li>
-            <li><b>DELETE</b> /api/authors/&#123;id&#125;</li>
-              <li>
-              <b>GET</b>
-              <a href="http://localhost:8080/api/books" target="_blank">
-                /api/books
-              </a>
-            </li>
-            <li><b>POST</b> /api/books</li>
-            <li><b>PUT</b> /api/books/&#123;id&#125;</li>
-            <li><b>DELETE</b> /api/books/&#123;id&#125;</li>
-         </ul>
-
-<!-- <ul class="list">
-  <li>
-    <b>GET</b>
-    <a href="http://localhost:8080/api/authors" target="_blank">
-      /api/authors
-    </a>
-  </li>
-
-  <li>
-    <b>POST</b>
-    <a href="http://localhost:8080/api/authors" target="_blank">
-      /api/authors
-    </a>
-  </li>
-
-  <li>
-    <b>PUT</b>
-    <a href="http://localhost:8080/api/authors" target="_blank">
-      /api/authors/{id}
-    </a>
-  </li>
-
-  <li>
-    <b>DELETE</b>
-    <a href="http://localhost:8080/api/authors" target="_blank">
-      /api/authors/{id}
-    </a>
-  </li>
-
-  <li>
-    <b>GET</b>
-    <a href="http://localhost:8080/api/books" target="_blank">
-      /api/books
-    </a>
-  </li>
-
-  <li>
-    <b>POST</b>
-    <a href="http://localhost:8080/api/books" target="_blank">
-      /api/books
-    </a>
-  </li>
-
-  <li>
-    <b>PUT</b>
-    <a href="http://localhost:8080/api/books" target="_blank">
-      /api/books/{id}
-    </a>
-  </li>
-
-  <li>
-    <b>DELETE</b>
-    <a href="http://localhost:8080/api/books" target="_blank">
-      /api/books/{id}
-    </a>
-  </li>
-</ul> -->
-         
-        </div>
-      </section>
-
-    
-    </main>
-  </div>
+  </main>
 </div>
