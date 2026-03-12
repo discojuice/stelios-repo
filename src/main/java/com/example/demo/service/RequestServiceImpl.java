@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.dto.RequestDto;
 import com.example.demo.entity.Request;
 import com.example.demo.repository.RequestRepository;
-import com.example.demo.service.RequestService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

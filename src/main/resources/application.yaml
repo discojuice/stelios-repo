@@ -5,22 +5,12 @@ spring:
   application:
     name: demo
 
-#  datasource:
-#    url: jdbc:h2:file:./data/librarydb;AUTO_SERVER=TRUE
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: liquibase
     password: liquibase
     driver-class-name: org.postgresql.Driver
 
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    defer-datasource-initialization: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -30,25 +20,13 @@ spring:
   sql:
     init:
       mode: never
-#      platform: h2
       continue-on-error: false
 
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
+  server:
+    port: 8080
 
-server:
-  port: 8080
-
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-    swagger-ui:
-      path: /swagger
-
-#logging:
-#  level:
-#    root: info
-#    org.hibernate.SQL: debug
-#    org.springframework.jdbc.datasource.init: debug
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+      swagger-ui:
+        path: /swagger
