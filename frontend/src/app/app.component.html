@@ -113,6 +113,7 @@
               <th style="width: 90px;">ID</th>
               <th>Question</th>
               <th>Answer</th>
+              <th>Created on</th>
               <th style="width: 180px;">Actions</th>
             </tr>
           </thead>
@@ -121,6 +122,8 @@
               <td>{{ r.id }}</td>
               <td>{{ r.question }}</td>
               <td>{{ r.answer }}</td>
+              <!-- <td>{{ r.createdOn }}</td> -->
+              <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
               <td>
                 <button class="small-btn" (click)="editRequest(r)">Edit</button>
                 <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
@@ -173,11 +176,11 @@
 
       <div class="panel">
         <div class="form-row">
-          <input
+          <!-- <input
             type="text"
             placeholder="Search by id"
             [(ngModel)]="searchId"
-          />
+          /> -->
 
           <input
             type="text"
@@ -208,6 +211,7 @@
               <th style="width: 90px;">ID</th>
               <th>Question</th>
               <th>Answer</th>
+              <th>Created on</th>
               <th style="width: 180px;">Actions</th>
             </tr>
           </thead>
@@ -216,6 +220,8 @@
               <td>{{ r.id }}</td>
               <td>{{ r.question }}</td>
               <td>{{ r.answer }}</td>
+              <!-- <td>{{ r.createdOn }}</td> -->
+               <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
               <td>
                 <button class="small-btn" (click)="editRequest(r)">Edit</button>
                 <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
@@ -235,6 +241,11 @@
       <div class="page-title">API Docs</div>
 
       <div class="panel">
+        <!-- <p>Open Swagger UI:</p>
+        <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
+          http://localhost:8080/swagger-ui/index.html
+        </a> -->
+
         <p>Open Swagger UI:</p>
         <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
           http://localhost:8080/swagger-ui/index.html
@@ -243,11 +254,12 @@
         <!-- <ul class="docs-list">
           <li>GET /api/requests</li>
           <li>GET /api/requests/{id}</li>
-          <li>GET /api/requests/search?question=...&answer=...</li>
+           <li>GET /api/requests/search?question=...&answer=...</li> 
           <li>POST /api/requests</li>
           <li>PUT /api/requests/{id}</li>
           <li>DELETE /api/requests/{id}</li>
         </ul> -->
+
       </div>
     </section>
 

@@ -7,6 +7,7 @@ interface RequestItem {
   id?: number;
   question: string;
   answer: string;
+  createdOn: Date;
 }
 
 @Component({
@@ -108,7 +109,8 @@ resetSearch(): void {
 
   form: RequestItem = {
     question: '',
-    answer: ''
+    answer: '',
+    createdOn: new Date(),
   };
 
   editingId: number | null = null;
@@ -141,7 +143,8 @@ resetSearch(): void {
 
     const payload = {
       question: this.form.question.trim(),
-      answer: this.form.answer.trim()
+      answer: this.form.answer.trim(),
+      createdOn: this.form.createdOn
     };
 
     if (!payload.question || !payload.answer) {
@@ -152,7 +155,7 @@ resetSearch(): void {
     this.http.post(this.apiUrl, payload).subscribe({
       next: () => {
         this.message = 'Request created successfully.';
-        this.form = { question: '', answer: '' };
+        this.form = { question: '', answer: '', createdOn: new Date() };
         this.loadRequests();
         this.activePage = 'requests';
       },
@@ -164,7 +167,8 @@ resetSearch(): void {
     this.editingId = item.id ?? null;
     this.form = {
       question: item.question,
-      answer: item.answer
+      answer: item.answer,
+      createdOn: item.createdOn
     };
     this.activePage = 'requests';
     this.clearMessages();
@@ -177,7 +181,8 @@ resetSearch(): void {
 
     const payload = {
       question: this.form.question.trim(),
-      answer: this.form.answer.trim()
+      answer: this.form.answer.trim(),
+      createdOn: this.form.createdOn
     };
 
     if (!payload.question || !payload.answer) {
@@ -197,7 +202,7 @@ resetSearch(): void {
 
   cancelEdit(): void {
     this.editingId = null;
-    this.form = { question: '', answer: '' };
+    this.form = { question: '', answer: '', createdOn: new Date() };
   }
 
   deleteRequest(id?: number): void {

@@ -9,7 +9,7 @@ html, body {
   box-sizing: border-box;
 }
 
-/* .app-shell {
+/*.app-shell {
   min-height: 100vh;
   background:
     linear-gradient(rgba(244, 237, 226, 0.85), rgba(244, 237, 226, 0.85)),
@@ -17,13 +17,39 @@ html, body {
   padding: 24px;
 } */
 
-body {
-  background-image: url('/assets/new.jpg');
+.app-shell {
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
+    url("/assets/library.jpg");
+
+  background-size: cover;
+  background-position: center;
+}
+
+  body {
+  background-image: url('/assets/library.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+} 
+
+html, body {
+  height: 100%;
 }
+
+/*body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+
+  background-image: url("/assets/library1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+} */
 
 .sidebar {
   width: 320px;
