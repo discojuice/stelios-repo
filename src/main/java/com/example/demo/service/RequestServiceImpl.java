@@ -4,6 +4,7 @@ import com.example.demo.dto.RequestDto;
 import com.example.demo.entity.Request;
 import com.example.demo.repository.RequestRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -58,6 +59,7 @@ public class RequestServiceImpl implements RequestService {
         Request entity = new Request();
         entity.setQuestion(input.getQuestion());
         entity.setAnswer(input.getAnswer());
+        entity.setCreatedOn();
 
         Request saved = requestRepository.save(entity);
         return toDto(saved);

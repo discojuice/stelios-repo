@@ -50,7 +50,7 @@ public class Request {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
+    public void setCreatedOn() {
+        this.createdOn = new Date();
     }
 }

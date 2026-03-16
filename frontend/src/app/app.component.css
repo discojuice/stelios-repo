@@ -28,13 +28,13 @@ html, body {
   background-position: center;
 }
 
-  body {
+  /* body {
   background-image: url('/assets/library.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-} 
+}  */
 
 html, body {
   height: 100%;
