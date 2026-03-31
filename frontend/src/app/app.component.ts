@@ -10,6 +10,7 @@ interface RequestItem {
   createdOn: Date;
   category: string;
   department: string;
+  requestNo: string;
 }
 
 @Component({
@@ -116,6 +117,7 @@ resetSearch(): void {
     createdOn: new Date(),
     category: '',
     department: '',
+    requestNo: ''
   };
 
   editingId: number | null = null;
@@ -149,7 +151,10 @@ resetSearch(): void {
     const payload = {
       question: this.form.question.trim(),
       answer: this.form.answer.trim(),
-      createdOn: this.form.createdOn
+      createdOn: this.form.createdOn,
+      department: this.form.department,
+      category: this.form.category,
+      requestNo: this.form.requestNo
     };
 
     if (!payload.question || !payload.answer) {
@@ -160,7 +165,7 @@ resetSearch(): void {
     this.http.post(this.apiUrl, payload).subscribe({
       next: () => {
         this.message = 'Request created successfully.';
-        this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '' };
+        this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '', requestNo: '' };
         this.loadRequests();
         this.activePage = 'requests';
       },
@@ -175,7 +180,8 @@ resetSearch(): void {
       answer: item.answer,
       createdOn: item.createdOn,
       category: item.category,
-      department: item.department
+      department: item.department,
+      requestNo: item.requestNo
     };
     this.activePage = 'requests';
     this.clearMessages();
@@ -209,7 +215,7 @@ resetSearch(): void {
 
   cancelEdit(): void {
     this.editingId = null;
-    this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '' };
+    this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '', requestNo: '' };
   }
 
   deleteRequest(id?: number): void {

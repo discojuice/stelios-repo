@@ -1,8 +1,7 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.Date;
 
 //@Data
@@ -15,6 +14,8 @@ import java.util.Date;
 //    private Date createdOn;
 //}
 
+@Setter
+@Getter
 public class RequestDto {
 
     private Long id;
@@ -23,6 +24,7 @@ public class RequestDto {
     private Date createdOn;
     private String department;
     private String category;
+    private String requestNo;
 
     public RequestDto() {
     }
@@ -36,52 +38,28 @@ public class RequestDto {
 //        this.category = "asdsasdaasdasasdas";
 //    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-    }
-
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public void setQuestion(String question) {
+//        this.question = question;
+//    }
+//
+//    public void setAnswer(String answer) {
+//        this.answer = answer;
+//    }
+//
+//    public void setCreatedOn(Date createdOn) {
+//        this.createdOn = createdOn;
+//    }
+//
+//
+//    public void setDepartment(String department) {
+//        this.department = department;
+//    }
+//
+//    public void setCategory(String category) {
+//        this.category = category;
+//    }
 }

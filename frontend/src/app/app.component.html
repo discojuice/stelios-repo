@@ -6,7 +6,7 @@
       Home
     </button> -->
 
-    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome()">
+    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome() ">
       Agents
     </button>
 
@@ -27,7 +27,7 @@
   <main class="content">
 
     <!-- HOME PAGE -->
-    <section *ngIf="activePage === 'home'">
+    <!-- <section *ngIf="activePage === 'home'">
       <div class="page-title">Requests</div>
 
       <div class="top-actions">
@@ -66,7 +66,7 @@
           </tbody>
         </table>
       </div>
-    </section>
+    </section> -->
 
     <!-- REQUESTS PAGE -->
     <section *ngIf="activePage === 'requests'">
@@ -88,6 +88,24 @@
             type="text"
             placeholder="Answer"
             [(ngModel)]="form.answer"
+          />
+
+           <input
+            type="text"
+            placeholder="Category"
+            [(ngModel)]="form.category"
+          />
+
+           <input
+            type="text"
+            placeholder="Department"
+            [(ngModel)]="form.department"
+          />
+
+           <input
+            type="text"
+            placeholder="Request Number"
+            [(ngModel)]="form.requestNo"
           />
 
           <button class="main-btn" *ngIf="editingId === null" (click)="createRequest()">
@@ -133,7 +151,7 @@
           <thead>
             <tr>
               <th style="width: 90px;">ID</th>
-              <th>Question</th>
+              <th>Request No</th>
               <th>Answer</th>
               <th>Created on</th>
                <th>Category</th>
@@ -143,12 +161,12 @@
           </thead>
           <tbody>
             <tr *ngFor="let r of requests">
-              <td>{{ r.id }}</td>
+              <td>{{ r.requestNo }}</td>
               <td>{{ r.question }}</td>
               <td>{{ r.answer }}</td>
               <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
-               <td>{{ r.category }}</td>
-                <td>{{ r.department }}</td>
+              <td>{{ r.category }}</td>
+              <td>{{ r.department }}</td>
               <td>
                 <button class="small-btn" (click)="editRequest(r)">Edit</button>
                 <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>

@@ -60,6 +60,9 @@ public class RequestServiceImpl implements RequestService {
         entity.setQuestion(input.getQuestion());
         entity.setAnswer(input.getAnswer());
         entity.setCreatedOn();
+        entity.setDepartment(input.getDepartment());
+        entity.setCategory(input.getCategory());
+        entity.setRequestNo(input.getRequestNo());
 
         Request saved = requestRepository.save(entity);
         return toDto(saved);
@@ -94,6 +97,7 @@ public class RequestServiceImpl implements RequestService {
         dto.setCreatedOn(entity.getCreatedOn());
         dto.setCategory(entity.getCategory());
         dto.setDepartment(entity.getDepartment());
+        dto.setRequestNo((entity.getRequestNo()));
         return dto;
     }
 
