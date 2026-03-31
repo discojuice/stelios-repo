@@ -21,16 +21,20 @@ public class RequestDto {
     private String question;
     private String answer;
     private Date createdOn;
+    private String department;
+    private String category;
 
     public RequestDto() {
     }
 
-    public RequestDto(Long id, String question, String answer, Date createdOn) {
-        this.id = id;
-        this.question = question;
-        this.answer = answer;
-        this.createdOn = createdOn;
-    }
+//    public RequestDto(Long id, String question, String answer, Date createdOn, String category, String department) {
+//        this.id = id;
+//        this.question = question;
+//        this.answer = answer;
+//        this.createdOn = createdOn;
+//        this.department = "dasdsa";
+//        this.category = "asdsasdaasdasasdas";
+//    }
 
     public Long getId() {
         return id;
@@ -62,5 +66,22 @@ public class RequestDto {
 
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
+    }
+
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

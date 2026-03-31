@@ -92,6 +92,9 @@ public class RequestServiceImpl implements RequestService {
         dto.setQuestion(entity.getQuestion());
         dto.setAnswer(entity.getAnswer());
         dto.setCreatedOn(entity.getCreatedOn());
+        dto.setCategory(entity.getCategory());
+        dto.setDepartment(entity.getDepartment());
         return dto;
     }
+
 }

@@ -18,6 +18,12 @@ public class Request {
     @Column(name = "answer")
     private String answer;
 
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "department")
+    private String department;
+
     @Column(name = "created_on")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
@@ -53,4 +59,24 @@ public class Request {
     public void setCreatedOn() {
         this.createdOn = new Date();
     }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+//    public void setCreatedOn(Date createdOn) {
+//        this.createdOn = createdOn;
+//    }
 }

@@ -8,6 +8,8 @@ interface RequestItem {
   question: string;
   answer: string;
   createdOn: Date;
+  category: string;
+  department: string;
 }
 
 @Component({
@@ -46,6 +48,7 @@ constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
       console.log('requests after assignment:', this.requests);
 
       this.cdr.detectChanges();    // force template refresh
+      console.log(data)
     },
     error: (err) => {
       console.error('load failed', err);
@@ -111,6 +114,8 @@ resetSearch(): void {
     question: '',
     answer: '',
     createdOn: new Date(),
+    category: '',
+    department: '',
   };
 
   editingId: number | null = null;
@@ -126,7 +131,7 @@ resetSearch(): void {
   goToHome(): void {
     this.activePage = 'home';
     this.loadRequests();
-    }
+  }
 
   goToRequests(): void {
     this.activePage = 'requests';
@@ -155,7 +160,7 @@ resetSearch(): void {
     this.http.post(this.apiUrl, payload).subscribe({
       next: () => {
         this.message = 'Request created successfully.';
-        this.form = { question: '', answer: '', createdOn: new Date() };
+        this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '' };
         this.loadRequests();
         this.activePage = 'requests';
       },
@@ -168,7 +173,9 @@ resetSearch(): void {
     this.form = {
       question: item.question,
       answer: item.answer,
-      createdOn: item.createdOn
+      createdOn: item.createdOn,
+      category: item.category,
+      department: item.department
     };
     this.activePage = 'requests';
     this.clearMessages();
@@ -202,7 +209,7 @@ resetSearch(): void {
 
   cancelEdit(): void {
     this.editingId = null;
-    this.form = { question: '', answer: '', createdOn: new Date() };
+    this.form = { question: '', answer: '', createdOn: new Date(), category: '', department: '' };
   }
 
   deleteRequest(id?: number): void {

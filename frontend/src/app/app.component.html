@@ -1,42 +1,17 @@
-<!-- <tr *ngFor="let r of requests">
-  <td>{{ r.id }}</td>
-  <td>{{ r.question }}</td>
-  <td>{{ r.answer }}</td>
-  <td>
-    <button class="small-btn" (click)="editRequest(r)">Edit</button>
-    <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
-  </td>
-</tr> -->
-
-<html>
-<head>
-  <title>Requests Vault</title>
-  <link rel="icon" type="image/x-icon" href="icon.png">
-</head>
-<body>
-
-
-
-<!-- 
-<title>Requests</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png"> -->
-
-
-<tr *ngIf="requests.length === 0">
-  <td colspan="4" class="empty-row">No requests found.</td>
-</tr>
-
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">SNOW requests</div>
 
-    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome()">
+    <!-- <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome()">
       Home
+    </button> -->
+
+    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome()">
+      Agents
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
-      Requests
+      Enablers
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'docs'" (click)="goToDocs()">
@@ -59,67 +34,8 @@
         <button class="ghost-btn" (click)="loadRequests()">Load Requests</button>
       </div>
 
-      <!-- <div class="panel">
-        <div class="form-row">
-          <input
-            type="text"
-            placeholder="Question"
-            [(ngModel)]="form.question"
-          />
-
-          <input
-            type="text"
-            placeholder="Answer"
-            [(ngModel)]="form.answer"
-          />
-
-          <button class="main-btn" *ngIf="editingId === null" (click)="createRequest()">
-            Create Request
-          </button>
-
-          <button class="main-btn" *ngIf="editingId !== null" (click)="updateRequest()">
-            Update Request
-          </button>
-
-          <button class="ghost-btn" *ngIf="editingId !== null" (click)="cancelEdit()">
-            Cancel
-          </button>
-        </div>
-
-        <div class="tip">
-          Tip: search by id, question or answer, then edit or delete from the table.
-        </div>
-      </div> -->
-
-      <!-- <div class="panel">
-        <div class="form-row">
-          <input
-            type="text"
-            placeholder="Search by id"
-            [(ngModel)]="searchId"
-          />
-
-          <input
-            type="text"
-            placeholder="Search by question"
-            [(ngModel)]="searchQuestion"
-          />
-
-          <input
-            type="text"
-            placeholder="Search by answer"
-            [(ngModel)]="searchAnswer"
-          />
-
-          <button type="button" class="main-btn" (click)="searchRequests()">Search</button>
-          <button type="button" class="ghost-btn" (click)="resetSearch()">Reset</button>
-        </div> 
-      </div> -->
-
       <div *ngIf="message" class="message success">{{ message }}</div>
       <div *ngIf="error" class="message error">{{ error }}</div>
-
-
 
       <div class="table-panel">
         <table>
@@ -137,7 +53,6 @@
               <td>{{ r.id }}</td>
               <td>{{ r.question }}</td>
               <td>{{ r.answer }}</td>
-              <!-- <td>{{ r.createdOn }}</td> -->
               <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
               <td>
                 <button class="small-btn" (click)="editRequest(r)">Edit</button>
@@ -146,7 +61,7 @@
             </tr>
 
             <tr *ngIf="requests.length === 0">
-              <td colspan="4" class="empty-row">No requests found.</td>
+              <td colspan="5" class="empty-row">No requests found.</td>
             </tr>
           </tbody>
         </table>
@@ -191,27 +106,21 @@
 
       <div class="panel">
         <div class="form-row">
-          <!-- <input
-            type="text"
-            placeholder="Search by id"
-            [(ngModel)]="searchId"
-          /> -->
-
           <input
             type="text"
             placeholder="Search by question"
             [(ngModel)]="searchQuestion"
+            (input)="searchRequests()"
           />
 
           <input
             type="text"
             placeholder="Search by answer"
             [(ngModel)]="searchAnswer"
+            (input)="searchRequests()"
           />
 
-          <!-- <button class="main-btn" (click)="searchRequests()">Search</button> -->
           <button type="button" class="main-btn" (click)="searchRequests()">Search</button>
-          <!-- <button class="ghost-btn" (click)="resetSearch()">Reset</button> -->
           <button type="button" class="ghost-btn" (click)="resetSearch()">Reset</button>
         </div>
       </div>
@@ -227,6 +136,8 @@
               <th>Question</th>
               <th>Answer</th>
               <th>Created on</th>
+               <th>Category</th>
+                <th>Department</th>
               <th style="width: 180px;">Actions</th>
             </tr>
           </thead>
@@ -235,8 +146,9 @@
               <td>{{ r.id }}</td>
               <td>{{ r.question }}</td>
               <td>{{ r.answer }}</td>
-              <!-- <td>{{ r.createdOn }}</td> -->
-               <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
+              <td>{{ r.createdOn | date:'yyyy-MM-dd HH:mm' }}</td>
+               <td>{{ r.category }}</td>
+                <td>{{ r.department }}</td>
               <td>
                 <button class="small-btn" (click)="editRequest(r)">Edit</button>
                 <button class="small-btn danger" (click)="deleteRequest(r.id)">Delete</button>
@@ -244,7 +156,7 @@
             </tr>
 
             <tr *ngIf="requests.length === 0">
-              <td colspan="4" class="empty-row">No requests found.</td>
+              <td colspan="5" class="empty-row">No requests found.</td>
             </tr>
           </tbody>
         </table>
@@ -256,29 +168,12 @@
       <div class="page-title">API Docs</div>
 
       <div class="panel">
-        <!-- <p>Open Swagger UI:</p>
-        <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
-          http://localhost:8080/swagger-ui/index.html
-        </a> -->
-
         <p>Open Swagger UI:</p>
         <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
           http://localhost:8080/swagger-ui/index.html
         </a>
-
-        <!-- <ul class="docs-list">
-          <li>GET /api/requests</li>
-          <li>GET /api/requests/{id}</li>
-           <li>GET /api/requests/search?question=...&answer=...</li> 
-          <li>POST /api/requests</li>
-          <li>PUT /api/requests/{id}</li>
-          <li>DELETE /api/requests/{id}</li>
-        </ul> -->
-
       </div>
     </section>
 
   </main>
 </div>
- </body>
-</html> 
