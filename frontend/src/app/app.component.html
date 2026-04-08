@@ -6,13 +6,21 @@
       Home
     </button> -->
 
-    <button class="menu-btn" [class.active]="activePage === 'home'" (click)="goToHome() ">
+    <button class="menu-btn" [class.active]="activePage === 'home'">
+      All
+    </button>
+
+    <button class="menu-btn" [class.active]="activePage === 'home'">
       Agents
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
       Enablers
     </button>
+
+     <!-- <button class="menu-btn" [class.active]="activePage === 'requests'">
+      Specialists
+    </button> -->
 
     <button class="menu-btn" [class.active]="activePage === 'docs'" (click)="goToDocs()">
       API Docs
@@ -27,7 +35,7 @@
   <main class="content">
 
     <!-- HOME PAGE -->
-    <!-- <section *ngIf="activePage === 'home'">
+    <section *ngIf="activePage === 'home'">
       <div class="page-title">Requests</div>
 
       <div class="top-actions">
@@ -66,7 +74,7 @@
           </tbody>
         </table>
       </div>
-    </section> -->
+    </section>
 
     <!-- REQUESTS PAGE -->
     <section *ngIf="activePage === 'requests'">
@@ -150,12 +158,12 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 90px;">ID</th>
-              <th>Request No</th>
+              <th style="width: 90px;">Request No</th>
+              <th>Question</th>
               <th>Answer</th>
               <th>Created on</th>
-               <th>Category</th>
-                <th>Department</th>
+              <th>Tags</th>
+              <th>Department</th>
               <th style="width: 180px;">Actions</th>
             </tr>
           </thead>
