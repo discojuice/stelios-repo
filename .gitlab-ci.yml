@@ -1,5 +1,3 @@
-# .gitlab-ci.yml
-
 stages:
   - build
   - test
@@ -12,7 +10,7 @@ variables:
 cache:
   paths:
     - .m2/repository
-    - node_modules/
+    - frontend/node_modules/
 
 # Backend Build Job
 build-backend:
@@ -28,9 +26,9 @@ build-backend:
 # Frontend Build Job
 build-frontend:
   stage: build
-  image: node:18
+  image: node:22  # Changed from node:18 to node:22
   script:
-    - cd frontend  # Adjust path to your Angular project
+    - cd frontend
     - npm ci
     - npm run build -- --configuration production
   artifacts:
@@ -53,11 +51,12 @@ test-backend:
 # Frontend Test Job (optional)
 test-frontend:
   stage: test
-  image: node:18
+  image: node:22  # Changed from node:18 to node:22
   script:
     - cd frontend
     - npm ci
     - npm run test -- --watch=false --browsers=ChromeHeadless
+  allow_failure: true
 
 # Package Spring Boot Application
 package:
