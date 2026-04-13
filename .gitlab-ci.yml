@@ -1,0 +1,12 @@
+stages:
+  - build
+
+build:
+  image: alpine 
+  stage: build
+  script:
+   - echo "Building the car..."
+   - mvn clean install
+  artifacts:
+    paths:
+      - build/
