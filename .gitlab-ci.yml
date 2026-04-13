@@ -10,7 +10,6 @@ variables:
 cache:
   paths:
     - .m2/repository
-    - frontend/node_modules/
 
 # Backend Build Job
 build-backend:
@@ -27,15 +26,17 @@ build-backend:
 build-frontend:
   stage: build
   image: node:22
+  cache: {}  # Disable cache completely for this job
   script:
     - cd frontend
-    - npm cache clean --force
-    - npm ci
+    - rm -rf node_modules
+    - npm install
     - npm run build -- --configuration production
   artifacts:
     paths:
       - frontend/dist/
     expire_in: 1 hour
+
 
 # Backend Test Job
 test-backend:
