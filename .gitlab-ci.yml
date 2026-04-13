@@ -1,12 +1,74 @@
+# .gitlab-ci.yml
+
 stages:
   - build
+  - test
+  - package
 
-build:
-  image: alpine 
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
+cache:
+  paths:
+    - .m2/repository
+    - node_modules/
+
+# Backend Build Job
+build-backend:
   stage: build
+  image: maven:3.9-eclipse-temurin-17
   script:
-   - echo "Building application..."
-   - mvn clean:clean
+    - mvn $MAVEN_CLI_OPTS clean compile
   artifacts:
     paths:
-      - build/
+      - target/
+    expire_in: 1 hour
+
+# Frontend Build Job
+build-frontend:
+  stage: build
+  image: node:18
+  script:
+    - cd frontend  # Adjust path to your Angular project
+    - npm ci
+    - npm run build -- --configuration production
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
+
+# Backend Test Job
+test-backend:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+# Frontend Test Job (optional)
+test-frontend:
+  stage: test
+  image: node:18
+  script:
+    - cd frontend
+    - npm ci
+    - npm run test -- --watch=false --browsers=ChromeHeadless
+
+# Package Spring Boot Application
+package:
+  stage: package
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
+  only:
+    - main
+    - develop
