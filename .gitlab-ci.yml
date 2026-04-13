@@ -5,8 +5,8 @@ build:
   image: alpine 
   stage: build
   script:
-   - echo "Building the car..."
-   - mvn clean install
+   - echo "Building application..."
+   - mvn clean:clean
   artifacts:
     paths:
       - build/
