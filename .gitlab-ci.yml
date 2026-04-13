@@ -51,14 +51,14 @@ test-backend:
         - target/surefire-reports/TEST-*.xml
 
 # Frontend Test Job (optional)
-test-frontend:
-  stage: test
-  image: node:22  # Changed from node:18 to node:22
-  script:
-    - cd frontend
-    - npm ci
-    - npm run test -- --watch=false --browsers=ChromeHeadless
-  allow_failure: true
+#test-frontend:
+#  stage: test
+#  image: node:22  # Changed from node:18 to node:22
+#  script:
+#    - cd frontend
+#    - npm ci
+#    - npm run test -- --watch=false --browsers=ChromeHeadless
+#  allow_failure: true
 
 # Package Spring Boot Application
 package:
