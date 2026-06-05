@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BlogComponent } from './components/blog/blog.component';
 
 interface RequestItem {
   id?: number;
@@ -16,26 +17,41 @@ interface RequestItem {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BlogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 
 export class AppComponent implements OnInit {
 
-  activePage: 'home' | 'requests' | 'docs' = 'home';
+  // activePage: 'home' | 'requests' | 'docs' = 'home';
+
+  activePage: 'blog' | 'requests' = 'blog';
+
+// goToHome(): void {
+//   this.activePage = 'blog';
+// }
+
+
+
+// goToDocs(): void {
+//   this.activePage = 'docs';
+// }
 
   private apiUrl = 'http://localhost:8080/api/requests';
 
   requests: RequestItem[] = [];
 
 
+
 constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
   ngOnInit(): void {
   console.log('ngOnInit fired');
-  this.activePage = 'requests';
+  this.activePage = 'blog';
   this.loadRequests();
+
 }
+
 
   loadRequests(): void {
   console.log('loadRequests called');
@@ -130,18 +146,13 @@ resetSearch(): void {
   error = '';
 
 
-  goToHome(): void {
-    this.activePage = 'home';
-    this.loadRequests();
+  goToBlog(): void {
+    this.activePage = 'blog';
   }
 
   goToRequests(): void {
     this.activePage = 'requests';
     this.loadRequests();
-  }
-
-  goToDocs(): void {
-    this.activePage = 'docs';
   }
 
 

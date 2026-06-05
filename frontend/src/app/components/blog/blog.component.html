@@ -1,0 +1,32 @@
+<!-- <div class="page-title">Blog</div> -->
+
+<!-- <div class="top-actions">
+  <button class="ghost-btn" (click)="loadBlogPosts()">Load Blog Posts</button>
+</div> -->
+
+<div class="table-panel">
+  <div *ngFor="let post of blogPosts" class="post-card">
+    <h2>{{ post.title }}</h2>
+
+    <img
+      *ngIf="post.mediaType === 'image'"
+      [src]="post.mediaUrl"
+      style="max-width: 500px; width: 100%;"
+    />
+
+    <video
+      *ngIf="post.mediaType === 'video'"
+      [src]="post.mediaUrl"
+      controls
+      style="max-width: 500px; width: 100%;"
+    ></video>
+
+    <p>{{ post.content }}</p>
+
+    <small>{{ post.createdOn | date:'yyyy-MM-dd HH:mm' }}</small>
+  </div>
+
+  <div *ngIf="blogPosts.length === 0" class="empty-row">
+    No blog posts found.
+  </div>
+</div>
