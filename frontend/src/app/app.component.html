@@ -19,7 +19,7 @@
 
   <main class="content">
 
-  <app-blog *ngIf="activePage === 'blog'"></app-blog>
+<app-blog [hidden]="activePage !== 'blog'"></app-blog>
 
     <!-- REQUESTS PAGE -->
     <section *ngIf="activePage === 'requests'">
