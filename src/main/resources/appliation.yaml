@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  application:
+    name: demo
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USERNAME:liquibase}
+    password: ${DATABASE_PASSWORD:liquibase}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  sql:
+    init:
+      mode: never
+      continue-on-error: false
+
+server:
+  port: ${PORT:8080}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger
