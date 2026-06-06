@@ -11,7 +11,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/blog-posts")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(
+        origins = {
+                "http://localhost:4200",
+                "https://myproject-1-vf3w.onrender.com"
+        }
+)
 public class BlogPostController {
 
     private final BlogPostRepository repository;
