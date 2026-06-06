@@ -14,11 +14,12 @@ html, body {
 
   background:
     linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
-    url("/assets/background/nature.jpg");
+    url("/assets/background/flags.jpg");
 
   background-size: cover;
   background-position: center;
 }
+
 
 html, body {
   height: 100%;

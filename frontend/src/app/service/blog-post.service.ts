@@ -1,15 +1,7 @@
-// import { Injectable } from "@angular/core";
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class BlogPostService {
-//  ...
-// }
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface BlogPost {
   id: number;
@@ -25,8 +17,8 @@ export interface BlogPost {
 })
 export class BlogPostService {
 
-  private readonly apiUrl = 'http://localhost:8080/api/blog-posts';
-
+  private apiUrl = `${environment.apiUrl}/blog-posts`;
+  
   constructor(private http: HttpClient) {}
 
   getPosts(): Observable<BlogPost[]> {
