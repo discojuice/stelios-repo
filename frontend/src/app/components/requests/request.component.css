@@ -1,76 +1,5 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #e8dfd2;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.app-shell {
-  min-height: 100vh;
-
-  background:
-    linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
-    url("/assets/background/flags.jpg");
-
-  background-size: cover;
-  background-position: center;
-}
-
-
-html, body {
-  height: 100%;
-}
-
-.sidebar {
-  width: 320px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  padding: 24px;
-  float: left;
-  min-height: 420px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
-
-.brand {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 24px;
-  color: #1d2643;
-}
-
-.menu-btn {
+:host {
   display: block;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 14px;
-  padding: 14px 18px;
-  border: none;
-  border-radius: 14px;
-  background: transparent;
-  color: #2d2d2d;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.menu-btn.active {
-  background: #c8ecef;
-  font-weight: bold;
-}
-
-.sidebar-info {
-  margin-top: 36px;
-  color: #557277;
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.content {
-  margin-left: 360px;
-  padding-left: 12px;
 }
 
 .page-title {
@@ -111,24 +40,24 @@ input {
   background: #fffdf9;
 }
 
-.main-btn {
+.main-btn,
+.ghost-btn {
   padding: 14px 22px;
-  border: none;
   border-radius: 14px;
-  background: #5cbadf;
-  color: white;
   font-size: 18px;
   cursor: pointer;
 }
 
+.main-btn {
+  border: none;
+  background: #5cbadf;
+  color: white;
+}
+
 .ghost-btn {
-  padding: 14px 22px;
   border: 1px solid #e2d7c7;
-  border-radius: 14px;
   background: white;
   color: #2d373d;
-  font-size: 18px;
-  cursor: pointer;
 }
 
 .small-btn {
@@ -138,6 +67,7 @@ input {
   background: white;
   color: #2f2f2f;
   margin-right: 8px;
+  margin-bottom: 8px;
   cursor: pointer;
 }
 
@@ -151,13 +81,19 @@ input {
   font-size: 17px;
 }
 
+.table-panel {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
   font-size: 20px;
 }
 
-th, td {
+th,
+td {
   padding: 16px 14px;
   border-bottom: 1px solid #eee2d1;
   text-align: left;
@@ -202,20 +138,39 @@ a {
   text-decoration: none;
 }
 
-@media (max-width: 1200px) {
-  .sidebar {
-    float: none;
-    width: 100%;
-    min-height: auto;
-    margin-bottom: 20px;
-  }
-
-  .content {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
+@media (max-width: 768px) {
   .page-title {
-    font-size: 38px;
+    font-size: 30px;
+  }
+
+  .top-actions {
+    text-align: left;
+  }
+
+  .panel,
+  .table-panel {
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input,
+  .main-btn,
+  .ghost-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  table {
+    font-size: 16px;
+  }
+
+  th,
+  td {
+    padding: 12px 10px;
   }
 }

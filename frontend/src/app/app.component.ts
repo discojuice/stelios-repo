@@ -13,11 +13,15 @@ import { BioComponent } from './components/bio/bio.component';
 })
 export class AppComponent {
 
-  activePage: 'blog' | 'requests' | 'bio' = 'bio';
+  activePage: 'blog' | 'requests' | 'bio' | null = null;
 
   goToBlog(): void {
     this.activePage = 'blog';
   }
+
+  //  goToHome(): void {
+  //   this.activePage = 'home';
+  // }
 
   goToRequests(): void {
     this.activePage = 'requests';

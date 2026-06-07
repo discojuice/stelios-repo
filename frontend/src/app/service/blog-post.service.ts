@@ -18,8 +18,8 @@ export interface BlogPost {
 export class BlogPostService {
 
   private apiUrl = `${environment.apiUrl}/blog-posts`;
-  
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   getPosts(): Observable<BlogPost[]> {
     return this.http.get<BlogPost[]>(this.apiUrl);

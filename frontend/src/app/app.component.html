@@ -1,10 +1,6 @@
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="brand">Stelio's space</div>
-
-    <button class="menu-btn" [class.active]="activePage === 'bio'" (click)="goToBio()">
-      Bio
-    </button>
+    <div class="brand">Menu</div>
 
     <button class="menu-btn" [class.active]="activePage === 'blog'" (click)="goToBlog()">
       Blog
@@ -13,11 +9,21 @@
     <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
       Requests
     </button>
+
+    <button class="menu-btn" [class.active]="activePage === 'bio'" (click)="goToBio()">
+      Bio
+    </button>
   </aside>
 
   <main class="content">
+    <div class="home-page" *ngIf="activePage === null">
+      <h1>Welcome</h1>
+      <p>Select a page from the menu.</p>
+    </div>
+
     <app-blog [hidden]="activePage !== 'blog'"></app-blog>
-    <app-requests [hidden]="activePage !== 'requests'"></app-requests>
-    <app-bio [hidden]="activePage !== 'bio'"></app-bio>
+    <!-- <app-blog *ngIf="activePage === 'blog'"></app-blog> -->
+    <app-requests *ngIf="activePage === 'requests'"></app-requests>
+    <app-bio *ngIf="activePage === 'bio'"></app-bio>
   </main>
 </div>
