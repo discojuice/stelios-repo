@@ -10,6 +10,10 @@
       Requests
     </button>
 
+    <button class="menu-btn" [class.active]="activePage === 'project'" (click)="goToProject()">
+      Project
+    </button>
+
     <button class="menu-btn" [class.active]="activePage === 'bio'" (click)="goToBio()">
       Bio
     </button>
@@ -25,5 +29,6 @@
     <!-- <app-blog *ngIf="activePage === 'blog'"></app-blog> -->
     <app-requests *ngIf="activePage === 'requests'"></app-requests>
     <app-bio *ngIf="activePage === 'bio'"></app-bio>
+    <app-project *ngIf="activePage === 'project'"></app-project>
   </main>
 </div>
