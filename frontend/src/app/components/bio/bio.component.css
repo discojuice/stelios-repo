@@ -19,47 +19,9 @@
   --rule: #ddd8cf;
 }
 
-/* ── Page shell ── */
-/* .page {
-  max-width: 960px;
-  margin: 0 auto;
-  background: white;
-  box-shadow: 0 0 80px rgba(15,29,53,0.10);
-} */
-
-/* .page {
-  background:
-    linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)),
-    url("/assets/bio/cover.jpeg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  border-radius: 18px;
-  padding: 32px;
-} */
-
-/* .page {
-  background:
-    linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)),
-    url('/assets/bio/cover.jpg');
-
-  background-size: cover;
-  background-position: center;
-} */
-
 .page {
   background: white;
 }
-
-/* ── Header ── */
-/* .header {
-  background: var(--navy);
-  padding: 64px 64px 52px;
-  position: relative;
-  overflow: hidden;
-} */
 
 .header {
   background:
@@ -421,21 +383,6 @@ h1 span {
 
 .footer-dot { color: var(--gold); font-size: 14px; }
 
-/* @media (max-width: 700px) {
-  .header { padding: 40px 24px 36px; }
-  .body { grid-template-columns: 1fr; }
-  .main { padding: 36px 24px; border-right: none; border-bottom: 1px solid var(--rule); }
-  .sidebar { padding: 36px 24px; }
-  .footer { padding: 16px 24px; }
-} */
-/* 
-@media (max-width: 768px) {
-  .page {
-    padding: 16px;
-    border-radius: 14px;
-    background-position: center top;
-  }
-} */
 
 @media (max-width: 768px) {
   .page {
