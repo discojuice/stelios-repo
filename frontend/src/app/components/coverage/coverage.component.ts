@@ -15,6 +15,7 @@ export class CoverageComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
   coverageStatus: any = null;
+  apiUrl = 'http://localhost:8080/api/coverage'; // ← UPDATE THIS IF NEEDED
 
   constructor(
     private http: HttpClient,
@@ -22,27 +23,51 @@ export class CoverageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCoverageStatus();
-    this.loadCoverageReport();
+    this.checkApiHealth();
   }
 
+  /**
+   * Check if API is running
+   */
+  checkApiHealth(): void {
+    this.http.get(`${this.apiUrl}/health`)
+      .subscribe({
+        next: () => {
+          this.loadCoverageStatus();
+          this.loadCoverageReport();
+        },
+        error: (error) => {
+          this.errorMessage = 'Backend API is not running. Please start the backend server on http://localhost:8080';
+          this.isLoading = false;
+          console.error('API Health Check Error:', error);
+        }
+      });
+  }
+
+  /**
+   * Load coverage status
+   */
   loadCoverageStatus(): void {
-    this.http.get('/api/coverage/status')
+    this.http.get(`${this.apiUrl}/status`)
       .subscribe({
         next: (status: any) => {
           this.coverageStatus = status;
         },
         error: (error) => {
           console.error('Error loading coverage status:', error);
+          this.errorMessage = 'Failed to load coverage status. Make sure the backend is running.';
         }
       });
   }
 
+  /**
+   * Load coverage report HTML
+   */
   loadCoverageReport(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.http.get('/api/coverage', { responseType: 'text' })
+    this.http.get(`${this.apiUrl}`, { responseType: 'text' })
       .subscribe({
         next: (html: string) => {
           this.coverageHtml = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -51,15 +76,25 @@ export class CoverageComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          this.errorMessage = 'Failed to load coverage report. Please run tests first: mvn clean test';
+          console.error('Error loading coverage report:', error);
           this.isLoading = false;
-          console.error('Error loading coverage:', error);
+          
+          if (error.status === 404) {
+            this.errorMessage = 'Coverage report not found. Run: mvn clean test';
+          } else if (error.status === 0) {
+            this.errorMessage = 'Cannot connect to backend. Is it running on http://localhost:8080?';
+          } else {
+            this.errorMessage = `Failed to load report (Error ${error.status})`;
+          }
         }
       });
   }
 
+  /**
+   * Refresh the report
+   */
   refreshReport(): void {
-    this.loadCoverageReport();
     this.loadCoverageStatus();
+    this.loadCoverageReport();
   }
 }

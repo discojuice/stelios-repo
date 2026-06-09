@@ -1,8 +1,8 @@
 <div class="coverage-container">
   <div class="coverage-header">
-    <h1>JaCoCo Code Coverage Report</h1>
-    <button (click)="refreshReport()" class="refresh-btn">
-      🔄 Refresh Report
+    <h1>📊 JaCoCo Code Coverage Report</h1>
+    <button (click)="refreshReport()" class="refresh-btn" [disabled]="isLoading">
+      🔄 Refresh
     </button>
   </div>
 
@@ -23,14 +23,21 @@
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading">
-    <p>Loading coverage report...</p>
+    <p>⏳ Loading coverage report...</p>
     <div class="spinner"></div>
   </div>
 
   <!-- Error State -->
   <div *ngIf="errorMessage && !isLoading" class="error-message">
     <p>⚠️ {{ errorMessage }}</p>
-    <p class="hint">To generate the report, run: <code>mvn clean test</code></p>
+    <div class="hint">
+      <p><strong>Troubleshooting:</strong></p>
+      <ul>
+        <li>Backend running on port 8080? <code>mvn spring-boot:run</code></li>
+        <li>Tests executed? <code>mvn clean test</code></li>
+        <li>CORS enabled? Check CoverageController.java</li>
+      </ul>
+    </div>
   </div>
 
   <!-- Coverage Report -->
