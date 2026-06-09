@@ -1,0 +1,76 @@
+stages:
+  - build
+  - test
+  - package
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
+cache:
+  paths:
+    - .m2/repository
+
+build-backend:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 hour
+
+build-frontend:
+  stage: build
+  image: node:22
+  cache: {}
+  script:
+    - cd frontend
+    - rm -rf node_modules
+    - npm install
+    - npm run build -- --configuration production
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
+
+test-backend:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+
+  services:
+    - name: postgres:16
+      alias: postgres
+
+  variables:
+    POSTGRES_DB: postgres
+    POSTGRES_USER: liquibase
+    POSTGRES_PASSWORD: liquibase
+
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    SPRING_DATASOURCE_USERNAME: liquibase
+    SPRING_DATASOURCE_PASSWORD: liquibase
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+package:
+  stage: package
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
+  only:
+    - main
+    - develop

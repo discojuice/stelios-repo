@@ -1,0 +1,75 @@
+stages:
+  - build
+  - test
+  - package
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
+cache:
+  paths:
+    - .m2/repository
+
+# Backend Build Job
+build-backend:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 hour
+
+# Frontend Build Job
+build-frontend:
+  stage: build
+  image: node:22
+  cache: {}  # Disable cache completely for this job
+  script:
+    - cd frontend
+    - rm -rf node_modules
+    - npm install
+    - npm run build -- --configuration production
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
+
+
+# Backend Test Job
+test-backend:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+# Frontend Test Job (optional)
+#test-frontend:
+#  stage: test
+#  image: node:22  # Changed from node:18 to node:22
+#  script:
+#    - cd frontend
+#    - npm ci
+#    - npm run test -- --watch=false --browsers=ChromeHeadless
+#  allow_failure: true
+
+# Package Spring Boot Application
+package:
+  stage: package
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
+  only:
+    - main
+    - develop
