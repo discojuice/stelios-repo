@@ -2,49 +2,11 @@
   <div class="coverage-header">
     <h1>📊 JaCoCo Code Coverage Report</h1>
     <div class="button-group">
-      <a href="http://localhost:8080/api/coverage-report" target="_blank" class="direct-link-btn">
+      <!-- <a href="http://localhost:8080/api/coverage-report" target="_blank" class="direct-link-btn">
+        🔗 View Full Report
+      </a> -->
+      <a [href]="coverageReportUrl" target="_blank" class="direct-link-btn">
         🔗 View Full Report
       </a>
-      <button (click)="refreshReport()" class="refresh-btn" [disabled]="isLoading">
-        🔄 Refresh
-      </button>
     </div>
   </div>
-
-  <!-- Status Card -->
-  <div class="status-card" *ngIf="coverageStatus">
-    <div class="status-info">
-      <p><strong>Status:</strong> 
-        <span [ngClass]="{'status-available': coverageStatus.available, 'status-unavailable': !coverageStatus.available}">
-          {{ coverageStatus.available ? '✓ Available' : '✗ Not Available' }}
-        </span>
-      </p>
-      <p><strong>Message:</strong> {{ coverageStatus.message }}</p>
-    </div>
-  </div>
-
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">
-    <p>⏳ Loading coverage report status...</p>
-    <div class="spinner"></div>
-  </div>
-
-  <!-- Error State -->
-  <div *ngIf="errorMessage && !isLoading" class="error-message">
-    <p>⚠️ {{ errorMessage }}</p>
-    <div class="hint">
-      <p><strong>Troubleshooting:</strong></p>
-      <ul>
-        <li>Backend running? <code>mvn spring-boot:run</code></li>
-        <li>Tests executed? <code>mvn clean test</code></li>
-        <li>Click "🔗 View Full Report" to open the interactive coverage report</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Success State -->
-  <div *ngIf="coverageStatus?.available && !isLoading" class="success-message">
-    <p>✅ Coverage report is ready!</p>
-    <p>Click the <strong>"View Full Report"</strong> button above to see the detailed interactive JaCoCo coverage report.</p>
-  </div>
-</div>

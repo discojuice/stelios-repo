@@ -69,16 +69,20 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public RequestDto update(Long id, RequestDto input) {
-        return requestRepository.findById(id)
-                .map(existing -> {
-                    existing.setQuestion(input.getQuestion());
-                    existing.setAnswer(input.getAnswer());
-                    Request saved = requestRepository.save(existing);
-                    return toDto(saved);
-                })
-                .orElse(null);
-    }
+public RequestDto update(Long id, RequestDto input) {
+    return requestRepository.findById(id)
+            .map(existing -> {
+                existing.setQuestion(input.getQuestion());
+                existing.setAnswer(input.getAnswer());
+                existing.setCategory(input.getCategory());
+                existing.setDepartment(input.getDepartment());
+                existing.setRequestNo(input.getRequestNo());
+
+                Request saved = requestRepository.save(existing);
+                return toDto(saved);
+            })
+            .orElse(null);
+}
 
     @Override
     public boolean delete(Long id) {

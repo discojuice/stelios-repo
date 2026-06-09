@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-coverage',
@@ -13,9 +14,10 @@ export class CoverageComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
   coverageStatus: any = null;
-  apiUrl = 'http://localhost:8080/api/coverage';
+  // apiUrl = 'http://localhost:8080/api/coverage';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+  coverageReportUrl = `${environment.apiUrl}/coverage-report`;
 
   ngOnInit(): void {
     this.checkApiHealth();
@@ -26,7 +28,7 @@ export class CoverageComponent implements OnInit {
    */
   checkApiHealth(): void {
     console.log('Checking API health...');
-    this.http.get(`${this.apiUrl}/health`)
+    this.http.get(`${environment.apiUrl}/health`)
       .subscribe({
         next: (response) => {
           console.log('API Health OK:', response);
@@ -40,12 +42,13 @@ export class CoverageComponent implements OnInit {
       });
   }
 
+
   /**
    * Load coverage status
    */
   loadCoverageStatus(): void {
     console.log('Loading coverage status...');
-    this.http.get(`${this.apiUrl}/status`)
+    this.http.get(`${environment.apiUrl}/status`)
       .subscribe({
         next: (status: any) => {
           console.log('Coverage status:', status);

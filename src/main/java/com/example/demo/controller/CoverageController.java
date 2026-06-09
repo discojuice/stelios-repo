@@ -12,6 +12,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import java.io.File;
 
 /**
  * Controller for serving JaCoCo code coverage reports.
@@ -67,6 +73,21 @@ public class CoverageController {
                     "Error reading report: " + e.getMessage()
             ));
         }
+    }
+
+
+    @GetMapping(value = "/report", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<Resource> getJacocoReport() {
+
+        File report = new File("target/site/jacoco/index.html");
+
+        if (!report.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(new FileSystemResource(report));
     }
 
     /**
