@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,16 +10,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./coverage.component.css']
 })
 export class CoverageComponent implements OnInit {
-  coverageHtml: SafeResourceUrl | null = null;
   isLoading = true;
   errorMessage: string | null = null;
   coverageStatus: any = null;
-  apiUrl = 'http://localhost:8080/api/coverage'; // ← UPDATE THIS IF NEEDED
+  apiUrl = 'http://localhost:8080/api/coverage';
 
-  constructor(
-    private http: HttpClient,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.checkApiHealth();
@@ -30,16 +25,17 @@ export class CoverageComponent implements OnInit {
    * Check if API is running
    */
   checkApiHealth(): void {
+    console.log('Checking API health...');
     this.http.get(`${this.apiUrl}/health`)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('API Health OK:', response);
           this.loadCoverageStatus();
-          this.loadCoverageReport();
         },
         error: (error) => {
-          this.errorMessage = 'Backend API is not running. Please start the backend server on http://localhost:8080';
-          this.isLoading = false;
           console.error('API Health Check Error:', error);
+          this.errorMessage = 'Backend API is not running. Please start: mvn spring-boot:run';
+          this.isLoading = false;
         }
       });
   }
@@ -48,53 +44,29 @@ export class CoverageComponent implements OnInit {
    * Load coverage status
    */
   loadCoverageStatus(): void {
+    console.log('Loading coverage status...');
     this.http.get(`${this.apiUrl}/status`)
       .subscribe({
         next: (status: any) => {
+          console.log('Coverage status:', status);
           this.coverageStatus = status;
+          this.isLoading = false;
         },
         error: (error) => {
           console.error('Error loading coverage status:', error);
-          this.errorMessage = 'Failed to load coverage status. Make sure the backend is running.';
+          this.errorMessage = 'Failed to load coverage status';
+          this.isLoading = false;
         }
       });
   }
 
   /**
-   * Load coverage report HTML
-   */
-  loadCoverageReport(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    this.http.get(`${this.apiUrl}`, { responseType: 'text' })
-      .subscribe({
-        next: (html: string) => {
-          this.coverageHtml = this.sanitizer.bypassSecurityTrustResourceUrl(
-            'data:text/html;charset=UTF-8,' + encodeURIComponent(html)
-          );
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading coverage report:', error);
-          this.isLoading = false;
-          
-          if (error.status === 404) {
-            this.errorMessage = 'Coverage report not found. Run: mvn clean test';
-          } else if (error.status === 0) {
-            this.errorMessage = 'Cannot connect to backend. Is it running on http://localhost:8080?';
-          } else {
-            this.errorMessage = `Failed to load report (Error ${error.status})`;
-          }
-        }
-      });
-  }
-
-  /**
-   * Refresh the report
+   * Refresh the status
    */
   refreshReport(): void {
+    console.log('Refreshing status...');
+    this.isLoading = true;
+    this.errorMessage = null;
     this.loadCoverageStatus();
-    this.loadCoverageReport();
   }
 }

@@ -1,9 +1,14 @@
 <div class="coverage-container">
   <div class="coverage-header">
     <h1>📊 JaCoCo Code Coverage Report</h1>
-    <button (click)="refreshReport()" class="refresh-btn" [disabled]="isLoading">
-      🔄 Refresh
-    </button>
+    <div class="button-group">
+      <a href="http://localhost:8080/api/coverage-report" target="_blank" class="direct-link-btn">
+        🔗 View Full Report
+      </a>
+      <button (click)="refreshReport()" class="refresh-btn" [disabled]="isLoading">
+        🔄 Refresh
+      </button>
+    </div>
   </div>
 
   <!-- Status Card -->
@@ -15,15 +20,12 @@
         </span>
       </p>
       <p><strong>Message:</strong> {{ coverageStatus.message }}</p>
-      <p *ngIf="coverageStatus.lastModified > 0">
-        <strong>Last Updated:</strong> {{ coverageStatus.lastModified | date:'medium' }}
-      </p>
     </div>
   </div>
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading">
-    <p>⏳ Loading coverage report...</p>
+    <p>⏳ Loading coverage report status...</p>
     <div class="spinner"></div>
   </div>
 
@@ -33,20 +35,16 @@
     <div class="hint">
       <p><strong>Troubleshooting:</strong></p>
       <ul>
-        <li>Backend running on port 8080? <code>mvn spring-boot:run</code></li>
+        <li>Backend running? <code>mvn spring-boot:run</code></li>
         <li>Tests executed? <code>mvn clean test</code></li>
-        <li>CORS enabled? Check CoverageController.java</li>
+        <li>Click "🔗 View Full Report" to open the interactive coverage report</li>
       </ul>
     </div>
   </div>
 
-  <!-- Coverage Report -->
-  <div *ngIf="coverageHtml && !isLoading" class="coverage-report">
-    <iframe 
-      [src]="coverageHtml" 
-      frameborder="0" 
-      width="100%" 
-      height="800px">
-    </iframe>
+  <!-- Success State -->
+  <div *ngIf="coverageStatus?.available && !isLoading" class="success-message">
+    <p>✅ Coverage report is ready!</p>
+    <p>Click the <strong>"View Full Report"</strong> button above to see the detailed interactive JaCoCo coverage report.</p>
   </div>
 </div>
