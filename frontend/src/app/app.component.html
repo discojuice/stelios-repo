@@ -10,6 +10,10 @@
       📋 Requests
     </button>
 
+    <button class="menu-btn" [class.active]="activePage === 'coverage'" (click)="goToTutorials()">
+      👀 Tutorials
+    </button>
+
     <button class="menu-btn" [class.active]="activePage === 'project'" (click)="goToProject()">
       🚀 Project
     </button>
@@ -22,7 +26,7 @@
     <button class="menu-btn" [class.active]="activePage === 'coverage'" (click)="goToCoverage()">
       📊 Coverage
     </button>
-    
+
   </aside>
 
   <main class="content">
@@ -36,5 +40,6 @@
     <app-bio *ngIf="activePage === 'bio'"></app-bio>
     <app-project *ngIf="activePage === 'project'"></app-project>
     <app-coverage *ngIf="activePage === 'coverage'"></app-coverage>
+    <app-tutorials *ngIf="activePage === 'tutorials'"></app-tutorials>
   </main>
 </div>

@@ -57,6 +57,7 @@ public class CoverageReportController {
         }
     }
 
+
     /**
      * Returns the raw HTML as string (for iframe loading)
      */

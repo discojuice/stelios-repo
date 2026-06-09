@@ -5,18 +5,19 @@ import { RequestsComponent } from './components/requests/request.component';
 import { BioComponent } from './components/bio/bio.component';
 import { ProjectComponent } from './components/project/project.component';
 import { CoverageComponent } from './components/coverage/coverage.component';
+import { TutorialsComponent } from './components/tutorials/tutorials.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, BlogComponent, RequestsComponent, BioComponent, ProjectComponent, CoverageComponent],
+  imports: [CommonModule, BlogComponent, RequestsComponent, BioComponent, ProjectComponent, CoverageComponent, TutorialsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
 
-  activePage: 'blog' | 'requests' | 'bio' | 'project' | 'coverage' | null = null;
+  activePage: 'blog' | 'requests' | 'bio' | 'project' | 'coverage' | 'tutorials' | null = null;
 
   goToBlog(): void {
     this.activePage = 'blog';
@@ -30,12 +31,16 @@ export class AppComponent {
     this.activePage = 'bio';
   }
 
-    goToProject(): void {
+  goToProject(): void {
     this.activePage = 'project';
   }
 
-   goToCoverage(): void {
+  goToCoverage(): void {
     this.activePage = 'coverage';
+  }
+
+  goToTutorials(): void {
+    this.activePage = 'tutorials';
   }
 }
 

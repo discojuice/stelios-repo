@@ -3,6 +3,7 @@ import { BlogComponent } from './components/blog/blog.component';
 import { BioComponent } from './components/bio/bio.component';
 import { CoverageComponent } from './components/coverage/coverage.component';
 import { NgModule } from '@angular/core';
+import { TutorialsComponent } from './components/tutorials/tutorials.component';
 
 
 export const routes: Routes = [
@@ -17,6 +18,10 @@ export const routes: Routes = [
     path: 'coverage',
     component: CoverageComponent,
     data: { title: 'Coverage Report' }
+  },
+  {
+    path: 'tutorials',
+    component: TutorialsComponent,
   }
 
 
