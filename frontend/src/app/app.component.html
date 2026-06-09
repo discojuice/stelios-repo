@@ -3,20 +3,26 @@
     <div class="brand">Menu</div>
 
     <button class="menu-btn" [class.active]="activePage === 'blog'" (click)="goToBlog()">
-      Blog
+      📝 Blog
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
-      Requests
+      📋 Requests
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'project'" (click)="goToProject()">
-      Project
+      🚀 Project
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'bio'" (click)="goToBio()">
-      Bio
+      👤 Bio
     </button>
+
+    <!-- Coverage Report Button -->
+    <button class="menu-btn" [class.active]="activePage === 'coverage'" (click)="goToCoverage()">
+      📊 Coverage
+    </button>
+    
   </aside>
 
   <main class="content">
@@ -26,9 +32,9 @@
     </div>
 
     <app-blog [hidden]="activePage !== 'blog'"></app-blog>
-    <!-- <app-blog *ngIf="activePage === 'blog'"></app-blog> -->
     <app-requests *ngIf="activePage === 'requests'"></app-requests>
     <app-bio *ngIf="activePage === 'bio'"></app-bio>
     <app-project *ngIf="activePage === 'project'"></app-project>
+    <app-coverage *ngIf="activePage === 'coverage'"></app-coverage>
   </main>
 </div>

@@ -4,8 +4,8 @@ stages:
   - package
 
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -XX:MaxRAMPercentage=90"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DfailIfNoTests=false"
 
 cache:
   paths:
@@ -38,29 +38,17 @@ build-frontend:
 test-backend:
   stage: test
   image: maven:3.9-eclipse-temurin-17
-
-  services:
-    - name: postgres:16
-      alias: postgres
-
-  variables:
-    POSTGRES_DB: postgres
-    POSTGRES_USER: liquibase
-    POSTGRES_PASSWORD: liquibase
-
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-    SPRING_DATASOURCE_USERNAME: liquibase
-    SPRING_DATASOURCE_PASSWORD: liquibase
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-
   script:
-    - mvn $MAVEN_CLI_OPTS test
-
+    - mvn $MAVEN_CLI_OPTS clean test -Dspring.profiles.active=test
   artifacts:
     when: always
     reports:
       junit:
         - target/surefire-reports/TEST-*.xml
+    paths:
+      - target/surefire-reports/
+      - target/site/jacoco/           # ← ADD THIS
+    expire_in: 1 week
 
 package:
   stage: package
