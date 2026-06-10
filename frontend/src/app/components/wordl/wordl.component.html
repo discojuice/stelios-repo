@@ -1,15 +1,30 @@
 <div class="wordle-container">
-  <h1>Word Game - Slovenian Version</h1>
+  <h1>Word Game</h1>
 
   <div class="language-switcher">
-  <button (click)="changeLanguage('greek')">
+  <!-- <button (click)="changeLanguage('greek')">
     🇬🇷 Greek
   </button>
 
   <button (click)="changeLanguage('slovenian')">
     🇸🇮 Slovenian
-  </button>
+  </button> -->
+
+  <button
+  (click)="changeLanguage('greek')"
+  [class.active-language]="selectedLanguage === 'greek'"
+>
+  🇬🇷 Greek
+</button>
+
+<button
+  (click)="changeLanguage('slovenian')"
+  [class.active-language]="selectedLanguage === 'slovenian'"
+>
+  🇸🇮 Slovenian
+</button>
 </div>
+
 
   <div class="board">
     <div class="row" *ngFor="let row of guesses; let rowIndex = index">

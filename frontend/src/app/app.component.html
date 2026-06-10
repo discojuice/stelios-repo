@@ -10,8 +10,12 @@
       📋 Requests
     </button>
 
-    <button class="menu-btn" [class.active]="activePage === 'coverage'" (click)="goToTutorials()">
+    <button class="menu-btn" [class.active]="activePage === 'games'" (click)="goToGames()">
       👀 Games
+    </button>
+
+     <button class="menu-btn" [class.active]="activePage === 'tutorials'" (click)="goToTutorials()">
+      👤 Tutorials
     </button>
 
     <button class="menu-btn" [class.active]="activePage === 'project'" (click)="goToProject()">
@@ -40,6 +44,7 @@
     <app-bio *ngIf="activePage === 'bio'"></app-bio>
     <app-project *ngIf="activePage === 'project'"></app-project>
     <app-coverage *ngIf="activePage === 'coverage'"></app-coverage>
+    <app-wordl *ngIf="activePage === 'games'"></app-wordl>
     <app-tutorials *ngIf="activePage === 'tutorials'"></app-tutorials>
   </main>
 </div>

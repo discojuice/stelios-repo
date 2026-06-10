@@ -1,0 +1,96 @@
+.wordle-container {
+  max-width: 420px;
+  margin: 40px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.language-switcher button {
+  padding: 10px 20px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-switcher button:hover {
+  background: #f0f0f0;
+}
+
+.active-language {
+  background: #4caf50 !important;
+  color: white !important;
+  border-color: #388e3c !important;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cell {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.correct {
+  background-color: #6aaa64;
+  color: white;
+  border-color: #6aaa64;
+}
+
+.present {
+  background-color: #c9b458;
+  color: white;
+  border-color: #c9b458;
+}
+
+.absent {
+  background-color: #787c7e;
+  color: white;
+  border-color: #787c7e;
+}
+
+.input-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  font-size: 18px;
+  width: 140px;
+  text-transform: uppercase;
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.message {
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.restart-btn {
+  margin-top: 10px;
+}

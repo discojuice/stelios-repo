@@ -1,30 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 type LetterState = 'correct' | 'present' | 'absent' | '';
 type Language = 'greek' | 'slovenian';
 
 @Component({
-  selector: 'app-tutorials',
+  selector: 'app-wordl',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
-  templateUrl: './tutorials.component.html',
-  styleUrls: ['./tutorials.component.css']
+  imports: [CommonModule, FormsModule],
+  templateUrl: './wordl.component.html',
+  styleUrls: ['./wordl.component.css']
 })
-export class TutorialsComponent implements OnInit {
+export class WordlComponent implements OnInit {
   readonly wordLength = 5;
   readonly maxTries = 6;
 
   selectedLanguage: Language = 'slovenian';
 
-  wordFiles: Record<Language, string> = {
+  answerFiles: Record<Language, string> = {
     greek: 'assets/greek-words.json',
     slovenian: 'assets/slovenian-words.json'
   };
 
+  guessFiles: Record<Language, string> = {
+    greek: 'assets/greek-words-guess.json',
+    slovenian: 'assets/slovenian-words-guess.json'
+  };
+
   words: string[] = [];
+  allowedGuesses: string[] = [];
   secretWord = '';
 
   currentGuess = '';
@@ -46,14 +52,25 @@ export class TutorialsComponent implements OnInit {
       this.selectedLanguage = savedLanguage;
     }
 
-    this.loadWords();
+    this.loadGame();
   }
 
-  loadWords(): void {
-    this.http.get<string[]>(this.wordFiles[this.selectedLanguage]).subscribe(words => {
-      this.words = words.map(word => word.toUpperCase());
-      this.secretWord = this.getRandomWord();
-      this.restart(false);
+  loadGame(): void {
+    this.http.get<string[]>(this.answerFiles[this.selectedLanguage]).subscribe(answerWords => {
+      this.words = answerWords.map(word => word.toUpperCase());
+
+      this.http.get<string[]>(this.guessFiles[this.selectedLanguage]).subscribe(guessWords => {
+        this.allowedGuesses = guessWords.map(word => word.toUpperCase());
+
+        this.words.forEach(word => {
+          if (!this.allowedGuesses.includes(word)) {
+            this.allowedGuesses.push(word);
+          }
+        });
+
+        this.secretWord = this.getRandomWord();
+        this.restart(false);
+      });
     });
   }
 
@@ -62,7 +79,7 @@ export class TutorialsComponent implements OnInit {
 
     this.selectedLanguage = language;
     localStorage.setItem('wordle-language', language);
-    this.loadWords();
+    this.loadGame();
   }
 
   getRandomWord(): string {
@@ -72,16 +89,19 @@ export class TutorialsComponent implements OnInit {
   submitGuess(): void {
     const guess = this.currentGuess.toUpperCase();
 
-    if (!this.secretWord) return;
+    if (this.guesses.includes(guess)) {
+        this.message = 'You already tried this word.';
+        return;
+    }
 
-    if (this.isGameOver()) return;
+    if (!this.secretWord || this.isGameOver()) return;
 
     if (guess.length !== this.wordLength) {
       this.message = 'Word must be 5 letters.';
       return;
     }
 
-    if (!this.words.includes(guess)) {
+    if (!this.allowedGuesses.includes(guess)) {
       this.message =
         this.selectedLanguage === 'greek'
           ? 'This word is not in the Greek dictionary.'
