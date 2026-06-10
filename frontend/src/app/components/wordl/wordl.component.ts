@@ -17,7 +17,7 @@ export class WordlComponent implements OnInit {
   readonly wordLength = 5;
   readonly maxTries = 6;
 
-  selectedLanguage: Language = 'slovenian';
+  selectedLanguage: Language = 'greek';
 
   answerFiles: Record<Language, string> = {
     greek: 'assets/greek-words.json',
