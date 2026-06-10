@@ -24,6 +24,36 @@
   background: #f0f0f0;
 }
 
+.row.shake {
+  animation: shake 0.45s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-10px);
+  }
+
+  40% {
+    transform: translateX(10px);
+  }
+
+  60% {
+    transform: translateX(-10px);
+  }
+
+  80% {
+    transform: translateX(10px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .active-language {
   background: #4caf50 !important;
   color: white !important;

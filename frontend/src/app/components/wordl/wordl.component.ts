@@ -32,6 +32,7 @@ export class WordlComponent implements OnInit {
   words: string[] = [];
   allowedGuesses: string[] = [];
   secretWord = '';
+  shake = false;
 
   currentGuess = '';
   currentRow = 0;
@@ -43,7 +44,7 @@ export class WordlComponent implements OnInit {
 
   message = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     const savedLanguage = localStorage.getItem('wordle-language') as Language | null;
@@ -53,6 +54,31 @@ export class WordlComponent implements OnInit {
     }
 
     this.loadGame();
+  }
+
+  shakeRow: number | null = null;
+
+
+  // triggerShake(): void {
+  //   this.shake = true;
+
+  //   setTimeout(() => {
+  //     this.shake = false;
+  //   }, 400);
+  // }
+
+
+
+  triggerShake(): void {
+    this.shakeRow = null;
+
+    setTimeout(() => {
+      this.shakeRow = this.currentRow;
+    }, 0);
+
+    setTimeout(() => {
+      this.shakeRow = null;
+    }, 500);
   }
 
   loadGame(): void {
@@ -82,6 +108,7 @@ export class WordlComponent implements OnInit {
     this.loadGame();
   }
 
+
   getRandomWord(): string {
     return this.words[Math.floor(Math.random() * this.words.length)];
   }
@@ -90,14 +117,17 @@ export class WordlComponent implements OnInit {
     const guess = this.currentGuess.toUpperCase();
 
     if (this.guesses.includes(guess)) {
-        this.message = 'You already tried this word.';
-        return;
+      this.message = 'You already tried this word.';
+      this.triggerShake();
+
+      return;
     }
 
     if (!this.secretWord || this.isGameOver()) return;
 
     if (guess.length !== this.wordLength) {
       this.message = 'Word must be 5 letters.';
+      this.triggerShake();
       return;
     }
 
@@ -106,6 +136,7 @@ export class WordlComponent implements OnInit {
         this.selectedLanguage === 'greek'
           ? 'This word is not in the Greek dictionary.'
           : 'This word is not in the Slovenian dictionary.';
+      this.triggerShake();
       return;
     }
 
@@ -123,6 +154,7 @@ export class WordlComponent implements OnInit {
 
     if (this.currentRow === this.maxTries) {
       this.message = `Game over. Word was ${this.secretWord}.`;
+      this.triggerShake();
     } else {
       this.message = '';
     }

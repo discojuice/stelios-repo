@@ -2,54 +2,36 @@
   <h1>Word Game</h1>
 
   <div class="language-switcher">
-  <!-- <button (click)="changeLanguage('greek')">
-    🇬🇷 Greek
-  </button>
 
-  <button (click)="changeLanguage('slovenian')">
-    🇸🇮 Slovenian
-  </button> -->
+    <button (click)="changeLanguage('greek')" [class.active-language]="selectedLanguage === 'greek'">
+      🇬🇷 Greek
+    </button>
 
-  <button
-  (click)="changeLanguage('greek')"
-  [class.active-language]="selectedLanguage === 'greek'"
->
-  🇬🇷 Greek
-</button>
-
-<button
-  (click)="changeLanguage('slovenian')"
-  [class.active-language]="selectedLanguage === 'slovenian'"
->
-  🇸🇮 Slovenian
-</button>
-</div>
+    <button (click)="changeLanguage('slovenian')" [class.active-language]="selectedLanguage === 'slovenian'">
+      🇸🇮 Slovenian
+    </button>
+  </div>
 
 
   <div class="board">
     <div class="row" *ngFor="let row of guesses; let rowIndex = index">
-      <div
-        class="cell"
-        *ngFor="let col of [0,1,2,3,4]; let colIndex = index"
-        [ngClass]="states[rowIndex][colIndex]"
-      >
+      <div class="cell" *ngFor="let col of [0,1,2,3,4]; let colIndex = index" [ngClass]="states[rowIndex][colIndex]">
         {{ getLetter(rowIndex, colIndex) }}
       </div>
     </div>
+
+    <!-- <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shake && rowIndex === currentRow"> -->
+    <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shakeRow === rowIndex">
+    </div>
+
+
+    <div class="input-area" *ngIf="!isGameOver()">
+      <input [(ngModel)]="currentGuess" maxlength="5" placeholder="Enter word" (keyup.enter)="submitGuess()" />
+
+      <button (click)="submitGuess()">Try</button>
+    </div>
+
+    <p class="message">{{ message }}</p>
+
+    <button class="restart-btn" (click)="restart()">Restart</button>
   </div>
-
-  <div class="input-area" *ngIf="!isGameOver()">
-    <input
-      [(ngModel)]="currentGuess"
-      maxlength="5"
-      placeholder="Enter word"
-      (keyup.enter)="submitGuess()"
-    />
-
-    <button (click)="submitGuess()">Try</button>
-  </div>
-
-  <p class="message">{{ message }}</p>
-
-  <button class="restart-btn" (click)="restart()">Restart</button>
-</div>
