@@ -4,6 +4,7 @@
   min-height: calc(100vh - 100px);
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .coverage-header {
@@ -15,6 +16,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
 .coverage-header h1 {
@@ -26,6 +28,7 @@
 .button-group {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .direct-link-btn,
@@ -42,6 +45,7 @@
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .direct-link-btn {
@@ -110,8 +114,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-message {
@@ -162,14 +171,50 @@
   font-weight: bold;
 }
 
+/* JACOCO IMAGE */
+
+.coverage-image {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  object-fit: contain;
+}
+
+/* TABLET */
+
+@media (max-width: 1024px) {
+  .coverage-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .coverage-image {
+    max-width: 100%;
+  }
+}
+
+/* MOBILE */
+
 @media (max-width: 768px) {
+  .coverage-container {
+    padding: 10px;
+    min-height: auto;
+  }
+
   .coverage-header {
     flex-direction: column;
-    gap: 10px;
+    align-items: stretch;
+    gap: 15px;
+    padding: 15px;
   }
 
   .coverage-header h1 {
     font-size: 20px;
+    text-align: center;
   }
 
   .button-group {
@@ -180,5 +225,44 @@
   .direct-link-btn,
   .refresh-btn {
     width: 100%;
+  }
+
+  .status-card,
+  .loading,
+  .error-message,
+  .success-message {
+    padding: 15px;
+  }
+
+  .status-info p {
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  .coverage-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 10px auto;
+  }
+}
+
+/* SMALL PHONES */
+
+@media (max-width: 480px) {
+  .coverage-header h1 {
+    font-size: 18px;
+  }
+
+  .direct-link-btn,
+  .refresh-btn {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .status-info p,
+  .success-message,
+  .error-message {
+    font-size: 12px;
   }
 }
