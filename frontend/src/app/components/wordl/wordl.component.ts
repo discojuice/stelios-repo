@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 type LetterState = 'correct' | 'present' | 'absent' | '';
-type Language = 'greek' | 'slovenian';
+type Language = 'greek' | 'slovenian' | 'english';
 
 @Component({
   selector: 'app-wordl',
@@ -21,13 +21,15 @@ export class WordlComponent implements OnInit {
   selectedLanguage: Language = 'greek';
 
   answerFiles: Record<Language, string> = {
-    greek: 'assets/greek-words.json',
-    slovenian: 'assets/slovenian-words.json'
+    greek: 'assets/wordl/greek-words.json',
+    slovenian: 'assets/wordlslovenian-words.json',
+    english: 'assets/wordl/english-words.json'
   };
 
   guessFiles: Record<Language, string> = {
-    greek: 'assets/greek-words-guess.json',
-    slovenian: 'assets/slovenian-words-guess.json'
+    greek: 'assets/wordl/greek-words-guess.json',
+    slovenian: 'assets/wordl/slovenian-words-guess.json',
+    english: 'assets/wordl/english-words-guess.json'
   };
 
   words: string[] = [];
@@ -50,7 +52,7 @@ export class WordlComponent implements OnInit {
   ngOnInit(): void {
     const savedLanguage = localStorage.getItem('wordle-language') as Language | null;
 
-    if (savedLanguage === 'greek' || savedLanguage === 'slovenian') {
+    if (savedLanguage === 'greek' || savedLanguage === 'slovenian' || savedLanguage === 'english') {
       this.selectedLanguage = savedLanguage;
     }
 
@@ -150,10 +152,10 @@ export class WordlComponent implements OnInit {
     }
 
     if (!this.allowedGuesses.includes(guess)) {
-      this.message =
-        this.selectedLanguage === 'greek'
-          ? 'This word is not in the Greek dictionary.'
-          : 'This word is not in the Slovenian dictionary.';
+      this.message = 'This word is not in the dictionary.'
+        // this.selectedLanguage === 'greek'
+        //   ? 'This word is not in the Greek dictionary.'
+        //   : 'This word is not in the Slovenian dictionary.';
 
       this.triggerShake();
       return;
