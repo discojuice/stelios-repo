@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlogPostService, BlogPost } from '../../service/blog-post.service';
 import { BlogComment } from '../../models/blog-comment';
@@ -19,41 +19,31 @@ export class BlogComponent implements OnInit {
   newComments: { [postId: number]: BlogComment } = {};
   commentMessages: { [postId: number]: string } = {};
 
+  isLoading = true;
+
   constructor(
     private blogPostService: BlogPostService,
-    private blogCommentService: BlogCommentService) { }
+    private blogCommentService: BlogCommentService,
+    private cdr: ChangeDetectorRef) { }
+
 
   ngOnInit(): void {
-    console.log('BlogComponent loaded');
-    this.loadBlogPosts();
-
-  }
-
-  loadBlogPosts(): void {
     this.blogPostService.getPosts().subscribe({
-      next: posts => {
-        this.blogPosts = [];
-
-        posts.forEach(post => {
-          this.newComments[post.id] = {
-            authorName: '',
-            commentText: ''
-          };
-
-          this.commentsByPostId[post.id] = [];
-        });
-
-        posts.forEach(post => {
-          this.loadComments(post.id);
-        });
-
-        setTimeout(() => {
-          this.blogPosts = posts;
-        }, 100);
+      next: (data) => {
+        console.log('next fired, data:', data);
+        this.blogPosts = data;
+        this.isLoading = false;
+        this.cdr.detectChanges();
       },
-      error: err => console.error(err)
+      error: (err) => {
+        console.error('error fired:', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
+
+
 
   loadComments(postId: number): void {
     this.blogCommentService.getComments(postId).subscribe({
