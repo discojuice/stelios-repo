@@ -6,9 +6,6 @@
   No blog posts found.
 </div>
 
-<p>isLoading: {{ isLoading }}</p>
-<p>blogPosts: {{ blogPosts.length }}</p>
-
 <div class="table-panel" *ngIf="!isLoading && blogPosts.length > 0">
   <div *ngFor="let post of blogPosts" class="post-card">
     <h2>{{ post.title }}</h2>
