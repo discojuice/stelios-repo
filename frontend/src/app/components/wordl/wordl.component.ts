@@ -47,7 +47,7 @@ export class WordlComponent implements OnInit {
 
   message = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     const savedLanguage = localStorage.getItem('wordle-language') as Language | null;
@@ -152,33 +152,26 @@ export class WordlComponent implements OnInit {
     }
 
     if (!this.allowedGuesses.includes(guess)) {
-      this.message = 'This word is not in the dictionary.'
-        // this.selectedLanguage === 'greek'
-        //   ? 'This word is not in the Greek dictionary.'
-        //   : 'This word is not in the Slovenian dictionary.';
-
+      this.message = 'This word is not in the dictionary.';
       this.triggerShake();
       return;
     }
 
     this.guesses[this.currentRow] = guess;
     this.states[this.currentRow] = this.checkGuess(guess);
+    this.currentRow++;        // ✅ always increment first
+    this.currentGuess = '';   // ✅ always clear
 
     if (guess === this.secretWord) {
       this.message = 'You won!';
-      this.currentGuess = '';
-      return;
-    }
-
-    this.currentRow++;
-    this.currentGuess = '';
+      return;                 // currentRow now points past the winning row
+    }                         // so getDisplayLetter reads from guesses[] correctly
 
     if (this.currentRow === this.maxTries) {
       this.message = `Game over. Word was ${this.secretWord}.`;
-    } else {
-      this.message = '';
     }
   }
+
 
   triggerShake(): void {
     this.shakeRow = this.currentRow;
@@ -217,12 +210,24 @@ export class WordlComponent implements OnInit {
     return this.guesses[row]?.[col] || '';
   }
 
-  getDisplayLetter(row: number, col: number): string {
-    if (row === this.currentRow) {
-      return this.currentGuess[col] || '';
-    }
+  // getDisplayLetter(row: number, col: number): string {
+  //   if (row === this.currentRow) {
+  //     return this.currentGuess[col] || '';
+  //   }
 
-    return this.getLetter(row, col);
+  //   return this.getLetter(row, col);
+  // }
+
+  getDisplayLetter(rowIndex: number, colIndex: number): string {
+    // Show submitted guesses from the guesses array
+    if (rowIndex < this.currentRow) {
+      return this.guesses[rowIndex][colIndex] || '';
+    }
+    // Show current in-progress guess (only if game is still active)
+    if (rowIndex === this.currentRow && !this.isGameOver()) {
+      return this.currentGuess[colIndex] || '';
+    }
+    return '';
   }
 
   isGameOver(): boolean {
