@@ -1,75 +1,63 @@
-<div class="table-panel">
+<div *ngIf="isLoading" class="empty-row">
+  Loading blog posts...
+</div>
+
+<div *ngIf="!isLoading && blogPosts.length === 0" class="empty-row">
+  No blog posts found.
+</div>
+
+<p>isLoading: {{ isLoading }}</p>
+<p>blogPosts: {{ blogPosts.length }}</p>
+
+<div class="table-panel" *ngIf="!isLoading && blogPosts.length > 0">
   <div *ngFor="let post of blogPosts" class="post-card">
     <h2>{{ post.title }}</h2>
 
-    <img
-      *ngIf="post.mediaType === 'image'"
-      [src]="post.mediaUrl"
-      style="max-width: 1000px; width: 100%;"
-    />
+    <img *ngIf="post.mediaType === 'image'" [src]="post.mediaUrl" style="max-width: 1000px; width: 100%;" />
 
-    <video
-      *ngIf="post.mediaType === 'video'"
-      [src]="post.mediaUrl"
-      controls
-      style="max-width: 500px; width: 100%;"
-    ></video>
+    <video *ngIf="post.mediaType === 'video'" [src]="post.mediaUrl" controls
+      style="max-width: 500px; width: 100%;"></video>
 
     <p>{{ post.content }}</p>
 
     <small>{{ post.createdOn | date:'yyyy-MM-dd HH:mm' }}</small>
 
     <div class="comments-section">
-  <h3>Comments</h3>
+      <h3>Comments</h3>
 
-  <div class="comment-box" *ngIf="newComments[post.id]">
-  <input
-    type="text"
-    placeholder="Your name"
-    [(ngModel)]="newComments[post.id].authorName"
-  />
+      <div class="comment-box" *ngIf="newComments[post.id]">
+        <input type="text" placeholder="Your name" [(ngModel)]="newComments[post.id].authorName" />
 
-  <textarea
-    placeholder="Write a comment..."
-    [(ngModel)]="newComments[post.id].commentText"
-  ></textarea>
+        <textarea placeholder="Write a comment..." [(ngModel)]="newComments[post.id].commentText"></textarea>
 
-  <button class="main-btn" type="button" (click)="submitComment(post.id)">
-    Post Comment
-  </button>
-</div>
-
-  <div class="comment-list">
-  
-    
-        <div *ngFor="let comment of (commentsByPostId[post.id] || [])" class="comment-card">
-    
-      <div class="comment-header">
-        <div class="comment-avatar">
-          {{ (comment.authorName || 'A').charAt(0).toUpperCase() }}
-        </div>
-
-        <div>
-          <div class="comment-author">
-            {{ comment.authorName || 'Anonymous' }}
-          </div>
-          <div class="comment-date">
-            {{ comment.createdOn | date:'yyyy-MM-dd HH:mm' }}
-          </div>
-        </div>
+        <button class="main-btn" type="button" (click)="submitComment(post.id)">
+          Post Comment
+        </button>
       </div>
 
-      <p class="comment-text">
-        {{ comment.commentText }}
-      </p>
+      <div class="comment-list">
+        <div *ngFor="let comment of (commentsByPostId[post.id] || [])" class="comment-card">
+          <div class="comment-header">
+            <div class="comment-avatar">
+              {{ (comment.authorName || 'A').charAt(0).toUpperCase() }}
+            </div>
+
+            <div>
+              <div class="comment-author">
+                {{ comment.authorName || 'Anonymous' }}
+              </div>
+
+              <div class="comment-date">
+                {{ comment.createdOn | date:'yyyy-MM-dd HH:mm' }}
+              </div>
+            </div>
+          </div>
+
+          <p class="comment-text">
+            {{ comment.commentText }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-  </div>
-
-  <div *ngIf="blogPosts.length === 0" class="empty-row">
-    No blog posts found.
-  </div>
-
- 
 </div>

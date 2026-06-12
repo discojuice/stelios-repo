@@ -2,49 +2,40 @@
   <aside class="sidebar">
     <div class="brand">Menu</div>
 
-    <button class="menu-btn" [class.active]="activePage === 'blog'" (click)="goToBlog()">
+    <button class="menu-btn" routerLink="/home" routerLinkActive="active">
+      🏠 Home
+    </button>
+
+    <button class="menu-btn" routerLink="/blog" routerLinkActive="active">
       📝 Blog
     </button>
 
-    <button class="menu-btn" [class.active]="activePage === 'requests'" (click)="goToRequests()">
+    <button class="menu-btn" routerLink="/requests" routerLinkActive="active">
       📋 Requests
     </button>
 
-    <button class="menu-btn" [class.active]="activePage === 'games'" (click)="goToGames()">
+    <button class="menu-btn" routerLink="/games" routerLinkActive="active">
       👾 Games
     </button>
 
-     <button class="menu-btn" [class.active]="activePage === 'tutorials'" (click)="goToTutorials()">
+    <button class="menu-btn" routerLink="/tutorials" routerLinkActive="active">
       👀 Tutorials
     </button>
 
-    <button class="menu-btn" [class.active]="activePage === 'project'" (click)="goToProject()">
+    <button class="menu-btn" routerLink="/project" routerLinkActive="active">
       🚀 Project
     </button>
 
-    <button class="menu-btn" [class.active]="activePage === 'bio'" (click)="goToBio()">
+    <button class="menu-btn" routerLink="/bio" routerLinkActive="active">
       👤 Bio
     </button>
 
-    <!-- Coverage Report Button -->
-    <button class="menu-btn" [class.active]="activePage === 'coverage'" (click)="goToCoverage()">
+    <button class="menu-btn" routerLink="/coverage" routerLinkActive="active">
       📊 Coverage
     </button>
-
   </aside>
 
   <main class="content">
-    <div class="home-page" *ngIf="activePage === null">
-      <h1>Welcome</h1>
-      <p>Select a page from the menu.</p>
-    </div>
-
-    <app-blog [hidden]="activePage !== 'blog'"></app-blog>
-    <app-requests *ngIf="activePage === 'requests'"></app-requests>
-    <app-bio *ngIf="activePage === 'bio'"></app-bio>
-    <app-project *ngIf="activePage === 'project'"></app-project>
-    <app-coverage *ngIf="activePage === 'coverage'"></app-coverage>
-    <app-wordl *ngIf="activePage === 'games'"></app-wordl>
-    <app-tutorials *ngIf="activePage === 'tutorials'"></app-tutorials>
+    <router-outlet></router-outlet>
   </main>
 </div>

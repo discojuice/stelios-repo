@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  gap: 28px;
+
+  background:
+    linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
+    url("/assets/background/nature.jpg");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.sidebar {
+  width: 320px;
+  flex: 0 0 320px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #1d2643;
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 14px;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: #2d2d2d;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.menu-btn.active {
+  background: #c8ecef;
+  font-weight: bold;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    flex-direction: column;
+    padding: 12px;
+    gap: 14px;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex: none;
+    padding: 14px;
+  }
+
+  .brand {
+    font-size: 24px;
+  }
+
+  .menu-btn {
+    font-size: 18px;
+    padding: 12px;
+  }
+}
+
+.home-page {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.home-page h1 {
+  font-size: 48px;
+  color: #37264b;
+  margin: 0 0 12px;
+}
+
+.home-page p {
+  font-size: 20px;
+  color: #557277;
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    padding: 20px;
+  }
+
+  .home-page h1 {
+    font-size: 32px;
+  }
+
+  .home-page p {
+    font-size: 17px;
+  }
+}

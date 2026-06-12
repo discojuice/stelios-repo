@@ -1,34 +1,23 @@
-import { RouterModule, Routes } from '@angular/router';
 import { BlogComponent } from './components/blog/blog.component';
 import { BioComponent } from './components/bio/bio.component';
 import { CoverageComponent } from './components/coverage/coverage.component';
-import { NgModule } from '@angular/core';
 import { TutorialsComponent } from './components/tutorials/tutorials.component';
+import { WordlComponent } from './components/wordl/wordl.component';
+import { RequestsComponent } from './components/requests/request.component';
+import { ProjectComponent } from './components/project/project.component';
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 
 export const routes: Routes = [
-  {
-    path: 'blog',
-    component: BlogComponent
-  },
-  { path: 'bio', 
-    component: BioComponent 
-  },
-  {
-    path: 'coverage',
-    component: CoverageComponent,
-    data: { title: 'Coverage Report' }
-  },
-  {
-    path: 'tutorials',
-    component: TutorialsComponent,
-  }
-
-
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'blog', component: BlogComponent },
+  { path: 'requests', component: RequestsComponent },
+  { path: 'games', component: WordlComponent },
+  { path: 'tutorials', component: TutorialsComponent },
+  { path: 'project', component: ProjectComponent },
+  { path: 'bio', component: BioComponent },
+  { path: 'coverage', component: CoverageComponent },
+  { path: '**', redirectTo: 'home' }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
