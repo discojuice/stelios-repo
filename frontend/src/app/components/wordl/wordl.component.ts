@@ -181,6 +181,16 @@ export class WordlComponent implements OnInit {
     }, 700);
   }
 
+  handleMobileInputFullWord(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.toUpperCase();
+
+  // Sync the input value into currentGuess
+  this.currentGuess = value.slice(0, 5);
+  
+  // Reflect it on the board (if your board reads from currentGuess directly this is automatic)
+}
+
   checkGuess(guess: string): LetterState[] {
     const result: LetterState[] = Array(this.wordLength).fill('absent');
     const secretLetters = this.secretWord.split('');
