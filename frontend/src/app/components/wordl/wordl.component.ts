@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
 
 type LetterState = 'correct' | 'present' | 'absent' | '';
 type Language = 'greek' | 'slovenian' | 'english';
@@ -8,7 +10,7 @@ type Language = 'greek' | 'slovenian' | 'english';
 @Component({
   selector: 'app-wordl',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './wordl.component.html',
   styleUrls: ['./wordl.component.css']
 })
@@ -65,7 +67,7 @@ export class WordlComponent implements OnInit {
       this.gameBoard?.nativeElement.focus();
     }, 0);
   }
-  
+
   onCellClick(rowIndex: number, colIndex: number): void {
   if (rowIndex !== this.currentRow || this.isGameOver()) return;
 

@@ -15,50 +15,24 @@
     </button>
   </div>
 
-  <!-- <div class="board">
-    <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shakeRow === rowIndex">
-      <div class="cell" *ngFor="let col of [0, 1, 2, 3, 4]; let colIndex = index" [ngClass]="states[rowIndex][colIndex]"
-        [class.active-cell]="rowIndex === currentRow && colIndex === currentGuess.length && !isGameOver()"
-        (click)="focusBoard()">
-        {{ getDisplayLetter(rowIndex, colIndex) }}
+   <div class="board">
+    <div class="row" *ngFor="let row of guesses; let rowIndex = index">
+      <div class="cell" *ngFor="let col of [0,1,2,3,4]; let colIndex = index" [ngClass]="states[rowIndex][colIndex]">
+        {{ getLetter(rowIndex, colIndex) }}
       </div>
     </div>
-  </div> -->
 
-  <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shakeRow === rowIndex">
-  <input
-    *ngFor="let col of [0, 1, 2, 3, 4]; let colIndex = index"
-    class="cell"
-    [ngClass]="states[rowIndex][colIndex]"
-    [class.active-cell]="rowIndex === currentRow && colIndex === currentGuess.length && !isGameOver()"
-    type="text"
-    inputmode="text"
-    autocomplete="off"
-    autocorrect="off"
-    autocapitalize="characters"
-    spellcheck="false"
-    maxlength="1"
-    readonly
-    [value]="getDisplayLetter(rowIndex, colIndex)"
-    (click)="onCellClick(rowIndex, colIndex)"
-    (keydown)="handleKeyDown($event)"
-  />
-</div>
+    <!-- <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shake && rowIndex === currentRow"> -->
+    <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shakeRow === rowIndex">
+    </div>
 
-  <input
-  #mobileInput
-  class="guess-input"
-  type="text"
-  inputmode="text"
-  maxlength="5"
-  placeholder="Type your guess..."
-  autocomplete="off"
-  autocorrect="off"
-  autocapitalize="characters"
-  spellcheck="false"
-  (keydown)="handleKeyDown($event)"
-  (input)="handleMobileInputFullWord($event)"
-/>
+
+    <div class="input-area" *ngIf="!isGameOver()">
+      <input [(ngModel)]="currentGuess" maxlength="5" placeholder="Enter word" (keyup.enter)="submitGuess()" />
+
+
+      <button (click)="submitGuess()">Try</button>
+    </div>
 
   <p class="hint" *ngIf="!isGameOver()">Click the board and type your word. Press Enter to try.</p>
 
