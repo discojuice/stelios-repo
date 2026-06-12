@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,6 +14,7 @@ type Language = 'greek' | 'slovenian' | 'english';
 })
 export class WordlComponent implements OnInit {
   @ViewChild('gameBoard') gameBoard!: ElementRef<HTMLDivElement>;
+  @ViewChildren('cellInput') cellInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   readonly wordLength = 5;
   readonly maxTries = 6;
@@ -64,6 +65,19 @@ export class WordlComponent implements OnInit {
       this.gameBoard?.nativeElement.focus();
     }, 0);
   }
+  
+  onCellClick(rowIndex: number, colIndex: number): void {
+  if (rowIndex !== this.currentRow || this.isGameOver()) return;
+
+  // Focus the active cell (current guess position)
+  const cells = document.querySelectorAll<HTMLInputElement>('.cell');
+  const activeIndex = this.currentRow * 5 + this.currentGuess.length;
+  const activeCell = cells[activeIndex];
+  if (activeCell) {
+    activeCell.focus();
+  }
+}
+
 
   handleKeyDown(event: KeyboardEvent): void {
     if (this.isGameOver()) return;

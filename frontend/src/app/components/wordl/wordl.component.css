@@ -23,6 +23,25 @@
   background: #f0f0f0;
 }
 
+.cell {
+  /* your existing styles: width, height, border, font-size, color, etc. */
+  
+  /* Add these to neutralize input appearance */
+  text-align: center;
+  text-transform: uppercase;
+  cursor: default;
+  caret-color: transparent;
+  background: transparent; /* or your existing cell background */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cell:focus {
+  outline: none;
+  /* optionally highlight the focused cell */
+  border-color: #999;
+}
+
 .language-switcher button.active-language {
   background: #4caf50;
   color: white;
