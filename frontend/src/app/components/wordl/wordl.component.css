@@ -128,6 +128,21 @@
   cursor: pointer;
 }
 
+.wordle-container {
+  outline: none;
+}
+
+.cell.active-cell {
+  border-color: #333;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+.hint {
+  font-size: 14px;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
 .message {
   font-weight: bold;
   min-height: 24px;

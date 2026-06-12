@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 type LetterState = 'correct' | 'present' | 'absent' | '';
@@ -9,11 +8,13 @@ type Language = 'greek' | 'slovenian';
 @Component({
   selector: 'app-wordl',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './wordl.component.html',
   styleUrls: ['./wordl.component.css']
 })
 export class WordlComponent implements OnInit {
+  @ViewChild('gameBoard') gameBoard!: ElementRef<HTMLDivElement>;
+
   readonly wordLength = 5;
   readonly maxTries = 6;
 
@@ -56,6 +57,49 @@ export class WordlComponent implements OnInit {
     this.loadGame();
   }
 
+  focusBoard(): void {
+    setTimeout(() => {
+      this.gameBoard?.nativeElement.focus();
+    }, 0);
+  }
+
+  handleKeyDown(event: KeyboardEvent): void {
+    if (this.isGameOver()) return;
+
+    const key = event.key;
+
+    if (key === 'Enter') {
+      event.preventDefault();
+      this.submitGuess();
+      return;
+    }
+
+    if (key === 'Backspace') {
+      event.preventDefault();
+      this.currentGuess = this.currentGuess.slice(0, -1);
+      this.message = '';
+      return;
+    }
+
+    if (key.length === 1 && this.currentGuess.length < this.wordLength) {
+      const letter = key.toUpperCase();
+
+      if (this.isValidLetter(letter)) {
+        event.preventDefault();
+        this.currentGuess += letter;
+        this.message = '';
+      }
+    }
+  }
+
+  isValidLetter(letter: string): boolean {
+    if (this.selectedLanguage === 'greek') {
+      return /^[Α-ΩΪΫ]$/.test(letter);
+    }
+
+    return /^[A-ZČŠŽ]$/.test(letter);
+  }
+
   loadGame(): void {
     this.http.get<string[]>(this.answerFiles[this.selectedLanguage]).subscribe(answerWords => {
       this.words = answerWords.map(word => word.toUpperCase());
@@ -71,6 +115,7 @@ export class WordlComponent implements OnInit {
 
         this.secretWord = this.getRandomWord();
         this.restart(false);
+        this.focusBoard();
       });
     });
   }
@@ -170,6 +215,14 @@ export class WordlComponent implements OnInit {
     return this.guesses[row]?.[col] || '';
   }
 
+  getDisplayLetter(row: number, col: number): string {
+    if (row === this.currentRow) {
+      return this.currentGuess[col] || '';
+    }
+
+    return this.getLetter(row, col);
+  }
+
   isGameOver(): boolean {
     return this.message === 'You won!' || this.currentRow === this.maxTries;
   }
@@ -187,5 +240,7 @@ export class WordlComponent implements OnInit {
       Array(this.wordLength).fill('')
     );
     this.message = '';
+
+    this.focusBoard();
   }
 }

@@ -1,4 +1,10 @@
-<div class="wordle-container">
+<div
+  class="wordle-container"
+  tabindex="0"
+  (keydown)="handleKeyDown($event)"
+  (click)="focusBoard()"
+  #gameBoard
+>
   <h1>Word Game</h1>
 
   <div class="language-switcher">
@@ -27,22 +33,15 @@
         class="cell"
         *ngFor="let col of [0, 1, 2, 3, 4]; let colIndex = index"
         [ngClass]="states[rowIndex][colIndex]"
+        [class.active-cell]="rowIndex === currentRow && colIndex === currentGuess.length && !isGameOver()"
+        (click)="focusBoard()"
       >
-        {{ getLetter(rowIndex, colIndex) }}
+        {{ getDisplayLetter(rowIndex, colIndex) }}
       </div>
     </div>
   </div>
 
-  <div class="input-area" *ngIf="!isGameOver()">
-    <input
-      [(ngModel)]="currentGuess"
-      maxlength="5"
-      placeholder="Enter word"
-      (keyup.enter)="submitGuess()"
-    />
-
-    <button (click)="submitGuess()">Try</button>
-  </div>
+  <p class="hint" *ngIf="!isGameOver()">Click the board and type your word. Press Enter to try.</p>
 
   <p class="message">{{ message }}</p>
 
