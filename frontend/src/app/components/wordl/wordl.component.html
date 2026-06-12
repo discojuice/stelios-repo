@@ -25,6 +25,21 @@
     </div>
   </div>
 
+  <input
+  #mobileInput
+  class="guess-input"
+  type="text"
+  inputmode="text"
+  maxlength="5"
+  placeholder="Type your guess..."
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  (keydown)="handleKeyDown($event)"
+  (input)="handleMobileInputFullWord($event)"
+/>
+
   <p class="hint" *ngIf="!isGameOver()">Click the board and type your word. Press Enter to try.</p>
 
   <p class="message">{{ message }}</p>

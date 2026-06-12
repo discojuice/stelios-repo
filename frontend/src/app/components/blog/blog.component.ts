@@ -30,9 +30,15 @@ export class BlogComponent implements OnInit {
   ngOnInit(): void {
     this.blogPostService.getPosts().subscribe({
       next: (data) => {
-        console.log('next fired, data:', data);
         this.blogPosts = data;
         this.isLoading = false;
+
+        // Load comments and init newComments for every post
+        data.forEach(post => {
+          this.loadComments(post.id);
+          this.newComments[post.id] = { authorName: '', commentText: '' };
+        });
+
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -43,13 +49,11 @@ export class BlogComponent implements OnInit {
     });
   }
 
-
-
   loadComments(postId: number): void {
     this.blogCommentService.getComments(postId).subscribe({
       next: data => {
-        console.log('COMMENTS for post', postId, data);
         this.commentsByPostId[postId] = data;
+        this.cdr.detectChanges(); // <-- needed so the view updates
       },
       error: err => console.error('COMMENTS ERROR', err)
     });
