@@ -1,12 +1,11 @@
 import { BlogComponent } from './components/blog/blog.component';
 import { BioComponent } from './components/bio/bio.component';
 import { CoverageComponent } from './components/coverage/coverage.component';
-import { TutorialsComponent } from './components/tutorials/tutorials.component';
-import { WordlComponent } from './components/wordl/wordl.component';
-import { RequestsComponent } from './components/requests/request.component';
+import { TutorialsComponent } from './components/tutorials/tutorials.component';import { RequestsComponent } from './components/requests/request.component';
 import { ProjectComponent } from './components/project/project.component';
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
+import { WordlComponent } from './components/wordl/wordl.component';
 
 
 export const routes: Routes = [

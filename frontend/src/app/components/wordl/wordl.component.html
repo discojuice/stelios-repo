@@ -2,17 +2,9 @@
   <h1>Word Game</h1>
 
   <div class="language-switcher">
-    <button (click)="changeLanguage('greek')" [class.active-language]="selectedLanguage === 'greek'">
-      Greek
-    </button>
-
-    <button (click)="changeLanguage('slovenian')" [class.active-language]="selectedLanguage === 'slovenian'">
-      Slovenian
-    </button>
-
-    <button (click)="changeLanguage('english')" [class.active-language]="selectedLanguage === 'english'">
-      English
-    </button>
+    <button (click)="changeLanguage('greek')" [class.active-language]="selectedLanguage === 'greek'">Greek</button>
+    <button (click)="changeLanguage('slovenian')" [class.active-language]="selectedLanguage === 'slovenian'">Slovenian</button>
+    <button (click)="changeLanguage('english')" [class.active-language]="selectedLanguage === 'english'">English</button>
   </div>
 
   <div class="board">
@@ -21,28 +13,28 @@
         class="cell"
         *ngFor="let col of [0,1,2,3,4]; let colIndex = index"
         [ngClass]="states[rowIndex][colIndex]"
+        [class.active-cell]="rowIndex === currentRow && colIndex === currentGuess.length && !isGameOver()"
       >
-        {{ getLetter(rowIndex, colIndex) }}
+        {{ getDisplayLetter(rowIndex, colIndex) }}
       </div>
     </div>
   </div>
 
-  <div class="input-area" *ngIf="!isGameOver()">
-    <input
-      [(ngModel)]="currentGuess"
-      maxlength="5"
-      placeholder="Enter word"
-      (keyup.enter)="submitGuess()"
-      (click)="$event.stopPropagation()"
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="characters"
-      spellcheck="false"
-    />
-    <button (click)="submitGuess()">Try</button>
-  </div>
+  <p class="hint" *ngIf="!isGameOver()">Use the keyboard below or your physical keyboard.</p>
 
-  <p class="hint" *ngIf="!isGameOver()">Type your word and press Enter or Try.</p>
+  <div class="keyboard" *ngIf="!isGameOver()">
+    <div class="keyboard-row" *ngFor="let row of keyboardRows">
+      <button
+        class="key"
+        *ngFor="let key of row"
+        [class.special-key]="key === 'ENTER' || key === '⌫'"
+        [ngClass]="getKeyboardKeyState(key)"
+        (click)="pressKey(key)"
+      >
+        {{ key }}
+      </button>
+    </div>
+  </div>
 
   <p class="message">{{ message }}</p>
 
