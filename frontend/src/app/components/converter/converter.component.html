@@ -1,0 +1,135 @@
+<div class="converter-container">
+    <h1>Converter</h1>
+
+    <div class="tabs">
+        <button [class.active]="activeTab === 'size'" (click)="activeTab = 'size'">
+            📏 Length
+        </button>
+
+        <button [class.active]="activeTab === 'weight'" (click)="activeTab = 'weight'">
+            ⚖️ Weight
+        </button>
+
+        <button [class.active]="activeTab === 'currency'" (click)="activeTab = 'currency'">
+            💰 Currency
+        </button>
+        <button [class.active]="activeTab === 'temperature'" (click)="activeTab = 'temperature'">
+            🌡️ Temperature
+        </button>
+    </div>
+
+    <div class="converter-card" *ngIf="activeTab === 'temperature'">
+
+        <h2>Temperature Converter</h2>
+
+        <input type="number" [(ngModel)]="temperatureValue" />
+
+        <div class="select-row">
+
+            <select [(ngModel)]="temperatureFrom">
+                <option value="C">Celsius (°C)</option>
+                <option value="F">Fahrenheit (°F)</option>
+            </select>
+
+            <button type="button" (click)="switchUnits('temperature')">
+                ⇄
+            </button>
+
+            <select [(ngModel)]="temperatureTo">
+                <option value="C">Celsius (°C)</option>
+                <option value="F">Fahrenheit (°F)</option>
+            </select>
+
+        </div>
+
+        <div class="result">
+            {{ temperatureValue }}
+            °{{ temperatureFrom }}
+            =
+            {{ temperatureResult | number:'1.0-2' }}
+            °{{ temperatureTo }}
+        </div>
+
+    </div>
+
+    <div class="converter-card" *ngIf="activeTab === 'size'">
+        <h2>Size Converter</h2>
+
+        <input type="number" [(ngModel)]="sizeValue" />
+
+        <div class="select-row">
+            <select [(ngModel)]="sizeFrom">
+                <option *ngFor="let unit of sizeUnits | keyvalue" [value]="unit.key">
+                    {{ unit.key }}
+                </option>
+            </select>
+
+            <button type="button" (click)="switchUnits('size')">⇄</button>
+
+            <select [(ngModel)]="sizeTo">
+                <option *ngFor="let unit of sizeUnits | keyvalue" [value]="unit.key">
+                    {{ unit.key }}
+                </option>
+            </select>
+        </div>
+
+        <div class="result">
+            {{ sizeValue }} {{ sizeFrom }} = {{ sizeResult | number:'1.0-4' }} {{ sizeTo }}
+        </div>
+    </div>
+
+    <div class="converter-card" *ngIf="activeTab === 'weight'">
+        <h2>Weight Converter</h2>
+
+        <input type="number" [(ngModel)]="weightValue" />
+
+        <div class="select-row">
+            <select [(ngModel)]="weightFrom">
+                <option *ngFor="let unit of weightUnits | keyvalue" [value]="unit.key">
+                    {{ unit.key }}
+                </option>
+            </select>
+
+            <button type="button" (click)="switchUnits('weight')">⇄</button>
+
+            <select [(ngModel)]="weightTo">
+                <option *ngFor="let unit of weightUnits | keyvalue" [value]="unit.key">
+                    {{ unit.key }}
+                </option>
+            </select>
+        </div>
+
+        <div class="result">
+            {{ weightValue }} {{ weightFrom }} = {{ weightResult | number:'1.0-4' }} {{ weightTo }}
+        </div>
+    </div>
+
+    <div class="converter-card" *ngIf="activeTab === 'currency'">
+        <h2>Currency Converter</h2>
+
+        <input type="number" [(ngModel)]="currencyValue" />
+
+        <div class="select-row">
+            <select [(ngModel)]="currencyFrom">
+                <option *ngFor="let currency of currencyRates | keyvalue" [value]="currency.key">
+                    {{ currency.key }}
+                </option>
+            </select>
+
+            <button type="button" (click)="switchUnits('currency')">⇄</button>
+
+            <select [(ngModel)]="currencyTo">
+                <option *ngFor="let currency of currencyRates | keyvalue" [value]="currency.key">
+                    {{ currency.key }}
+                </option>
+            </select>
+        </div>
+
+        <div class="result">
+            {{ currencyValue }} {{ currencyFrom }} =
+            {{ currencyResult | number:'1.0-2' }} {{ currencyTo }}
+        </div>
+
+        <small>Rates are static for now. You can connect them to an API later.</small>
+    </div>
+</div>
