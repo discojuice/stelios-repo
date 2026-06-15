@@ -22,7 +22,7 @@ export class WordlComponent implements OnInit {
 
   answerFiles: Record<Language, string> = {
     greek: 'assets/wordl/greek-words.json',
-    slovenian: 'assets/wordlslovenian-words.json',
+    slovenian: 'assets/wordl/slovenian-words.json',
     english: 'assets/wordl/english-words.json'
   };
 
@@ -31,6 +31,27 @@ export class WordlComponent implements OnInit {
     slovenian: 'assets/wordl/slovenian-words-guess.json',
     english: 'assets/wordl/english-words-guess.json'
   };
+
+  keyboardLayouts: Record<Language, string[][]> = {
+    english: [
+      ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+      ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫']
+    ],
+    slovenian: [
+      ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Š'],
+      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Č'],
+      ['ENTER', 'Y', 'X', 'C', 'V', 'B', 'N', 'M', 'Ž', '⌫']
+    ],
+    greek: [
+      ['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ'],
+      ['Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ'],
+      ['ENTER', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω', '⌫']
+    ]
+  };
+
+  keyboardRows: string[][] = this.keyboardLayouts[this.selectedLanguage];
+  keyboardStates: Record<string, LetterState> = {};
 
   words: string[] = [];
   allowedGuesses: string[] = [];
@@ -47,7 +68,7 @@ export class WordlComponent implements OnInit {
 
   message = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     const savedLanguage = localStorage.getItem('wordle-language') as Language | null;
@@ -56,42 +77,67 @@ export class WordlComponent implements OnInit {
       this.selectedLanguage = savedLanguage;
     }
 
+    this.keyboardRows = this.keyboardLayouts[this.selectedLanguage];
     this.loadGame();
   }
 
   focusBoard(): void {
-    setTimeout(() => {
-      this.gameBoard?.nativeElement.focus();
-    }, 0);
+    setTimeout(() => this.gameBoard?.nativeElement.focus(), 0);
   }
 
   handleKeyDown(event: KeyboardEvent): void {
     if (this.isGameOver()) return;
 
-    const key = event.key;
-
-    if (key === 'Enter') {
+    if (event.key === 'Enter') {
       event.preventDefault();
       this.submitGuess();
       return;
     }
 
-    if (key === 'Backspace') {
+    if (event.key === 'Backspace') {
       event.preventDefault();
-      this.currentGuess = this.currentGuess.slice(0, -1);
-      this.message = '';
+      this.removeLetter();
       return;
     }
 
-    if (key.length === 1 && this.currentGuess.length < this.wordLength) {
-      const letter = key.toUpperCase();
+    const letter = event.key.toUpperCase();
 
-      if (this.isValidLetter(letter)) {
-        event.preventDefault();
-        this.currentGuess += letter;
-        this.message = '';
-      }
+    if (letter.length === 1 && this.isValidLetter(letter)) {
+      event.preventDefault();
+      this.addLetter(letter);
     }
+  }
+
+  pressKey(key: string): void {
+    if (this.isGameOver()) return;
+
+    if (key === 'ENTER') {
+      this.submitGuess();
+      return;
+    }
+
+    if (key === '⌫') {
+      this.removeLetter();
+      return;
+    }
+
+    this.addLetter(key);
+  }
+
+  addLetter(letter: string): void {
+    if (this.currentGuess.length >= this.wordLength) return;
+
+    if (this.isValidLetter(letter)) {
+      this.currentGuess += letter.toUpperCase();
+      this.message = '';
+      this.focusBoard();
+    }
+  }
+
+  removeLetter(): void {
+    this.currentGuess = this.currentGuess.slice(0, -1);
+    this.message = '';
+    this.focusBoard();
   }
 
   isValidLetter(letter: string): boolean {
@@ -103,6 +149,8 @@ export class WordlComponent implements OnInit {
   }
 
   loadGame(): void {
+    this.keyboardRows = this.keyboardLayouts[this.selectedLanguage];
+
     this.http.get<string[]>(this.answerFiles[this.selectedLanguage]).subscribe(answerWords => {
       this.words = answerWords.map(word => word.toUpperCase());
 
@@ -117,16 +165,17 @@ export class WordlComponent implements OnInit {
 
         this.secretWord = this.getRandomWord();
         this.restart(false);
-        this.focusBoard();
       });
     });
   }
 
+  
   changeLanguage(language: Language): void {
     if (this.selectedLanguage === language) return;
 
     this.selectedLanguage = language;
     localStorage.setItem('wordle-language', language);
+    this.keyboardRows = this.keyboardLayouts[language];
     this.loadGame();
   }
 
@@ -157,39 +206,24 @@ export class WordlComponent implements OnInit {
       return;
     }
 
+    const rowStates = this.checkGuess(guess);
+
     this.guesses[this.currentRow] = guess;
-    this.states[this.currentRow] = this.checkGuess(guess);
-    this.currentRow++;        // ✅ always increment first
-    this.currentGuess = '';   // ✅ always clear
+    this.states[this.currentRow] = rowStates;
+    this.updateKeyboardStates(guess, rowStates);
+
+    this.currentRow++;
+    this.currentGuess = '';
 
     if (guess === this.secretWord) {
       this.message = 'You won!';
-      return;                 // currentRow now points past the winning row
-    }                         // so getDisplayLetter reads from guesses[] correctly
+      return;
+    }
 
     if (this.currentRow === this.maxTries) {
       this.message = `Game over. Word was ${this.secretWord}.`;
     }
   }
-
-
-  triggerShake(): void {
-    this.shakeRow = this.currentRow;
-
-    setTimeout(() => {
-      this.shakeRow = null;
-    }, 700);
-  }
-
-  handleMobileInputFullWord(event: Event) {
-  const input = event.target as HTMLInputElement;
-  const value = input.value.toUpperCase();
-
-  // Sync the input value into currentGuess
-  this.currentGuess = value.slice(0, 5);
-  
-  // Reflect it on the board (if your board reads from currentGuess directly this is automatic)
-}
 
   checkGuess(guess: string): LetterState[] {
     const result: LetterState[] = Array(this.wordLength).fill('absent');
@@ -216,28 +250,48 @@ export class WordlComponent implements OnInit {
     return result;
   }
 
-  getLetter(row: number, col: number): string {
-    return this.guesses[row]?.[col] || '';
+  updateKeyboardStates(guess: string, rowStates: LetterState[]): void {
+    const priority: Record<LetterState, number> = {
+      '': 0,
+      absent: 1,
+      present: 2,
+      correct: 3
+    };
+
+    for (let i = 0; i < guess.length; i++) {
+      const letter = guess[i];
+      const newState = rowStates[i];
+      const oldState = this.keyboardStates[letter] || '';
+
+      if (priority[newState] > priority[oldState]) {
+        this.keyboardStates[letter] = newState;
+      }
+    }
   }
 
-  // getDisplayLetter(row: number, col: number): string {
-  //   if (row === this.currentRow) {
-  //     return this.currentGuess[col] || '';
-  //   }
-
-  //   return this.getLetter(row, col);
-  // }
+  getKeyboardKeyState(key: string): LetterState {
+    if (key === 'ENTER' || key === '⌫') return '';
+    return this.keyboardStates[key] || '';
+  }
 
   getDisplayLetter(rowIndex: number, colIndex: number): string {
-    // Show submitted guesses from the guesses array
     if (rowIndex < this.currentRow) {
       return this.guesses[rowIndex][colIndex] || '';
     }
-    // Show current in-progress guess (only if game is still active)
+
     if (rowIndex === this.currentRow && !this.isGameOver()) {
       return this.currentGuess[colIndex] || '';
     }
+
     return '';
+  }
+
+  triggerShake(): void {
+    this.shakeRow = this.currentRow;
+
+    setTimeout(() => {
+      this.shakeRow = null;
+    }, 700);
   }
 
   isGameOver(): boolean {
@@ -252,6 +306,7 @@ export class WordlComponent implements OnInit {
     this.currentGuess = '';
     this.currentRow = 0;
     this.shakeRow = null;
+    this.keyboardStates = {};
     this.guesses = Array(this.maxTries).fill('');
     this.states = Array.from({ length: this.maxTries }, () =>
       Array(this.wordLength).fill('')

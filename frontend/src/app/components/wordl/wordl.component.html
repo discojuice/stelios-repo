@@ -1,46 +1,40 @@
-<div class="wordle-container" tabindex="0" (keydown)="handleKeyDown($event)" (click)="focusBoard()" #gameBoard>
+<div class="wordle-container" tabindex="0" (keydown)="handleKeyDown($event)" #gameBoard>
   <h1>Word Game</h1>
 
   <div class="language-switcher">
-    <button (click)="changeLanguage('greek')" [class.active-language]="selectedLanguage === 'greek'">
-      Greek
-    </button>
-
-    <button (click)="changeLanguage('slovenian')" [class.active-language]="selectedLanguage === 'slovenian'">
-      Slovenian
-    </button>
-
-    <button (click)="changeLanguage('english')" [class.active-language]="selectedLanguage === 'english'">
-      English
-    </button>
+    <button (click)="changeLanguage('greek')" [class.active-language]="selectedLanguage === 'greek'">Greek</button>
+    <button (click)="changeLanguage('slovenian')" [class.active-language]="selectedLanguage === 'slovenian'">Slovenian</button>
+    <button (click)="changeLanguage('english')" [class.active-language]="selectedLanguage === 'english'">English</button>
   </div>
 
   <div class="board">
     <div class="row" *ngFor="let row of guesses; let rowIndex = index" [class.shake]="shakeRow === rowIndex">
-      <div class="cell" *ngFor="let col of [0, 1, 2, 3, 4]; let colIndex = index" [ngClass]="states[rowIndex][colIndex]"
+      <div
+        class="cell"
+        *ngFor="let col of [0,1,2,3,4]; let colIndex = index"
+        [ngClass]="states[rowIndex][colIndex]"
         [class.active-cell]="rowIndex === currentRow && colIndex === currentGuess.length && !isGameOver()"
-        (click)="focusBoard()">
+      >
         {{ getDisplayLetter(rowIndex, colIndex) }}
       </div>
     </div>
   </div>
 
-  <input
-  #mobileInput
-  class="guess-input"
-  type="text"
-  inputmode="text"
-  maxlength="5"
-  placeholder="Type your guess..."
-  autocomplete="off"
-  autocorrect="off"
-  autocapitalize="characters"
-  spellcheck="false"
-  (keydown)="handleKeyDown($event)"
-  (input)="handleMobileInputFullWord($event)"
-/>
+  <p class="hint" *ngIf="!isGameOver()">Use the keyboard below or your physical keyboard.</p>
 
-  <p class="hint" *ngIf="!isGameOver()">Click the board and type your word. Press Enter to try.</p>
+  <div class="keyboard" *ngIf="!isGameOver()">
+    <div class="keyboard-row" *ngFor="let row of keyboardRows">
+      <button
+        class="key"
+        *ngFor="let key of row"
+        [class.special-key]="key === 'ENTER' || key === '⌫'"
+        [ngClass]="getKeyboardKeyState(key)"
+        (click)="pressKey(key)"
+      >
+        {{ key }}
+      </button>
+    </div>
+  </div>
 
   <p class="message">{{ message }}</p>
 
