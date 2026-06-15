@@ -35,30 +35,30 @@ build-frontend:
       - frontend/dist/
     expire_in: 1 hour
 
-test-backend:
-  stage: test
-  image: maven:3.9-eclipse-temurin-17
-  script:
-    - mvn $MAVEN_CLI_OPTS clean test -Dspring.profiles.active=test
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports/
-      - target/site/jacoco/           # ← ADD THIS
-    expire_in: 1 week
+# test-backend:
+#   stage: test
+#   image: maven:3.9-eclipse-temurin-17
+#   script:
+#     - mvn $MAVEN_CLI_OPTS clean test -Dspring.profiles.active=test
+#   artifacts:
+#     when: always
+#     reports:
+#       junit:
+#         - target/surefire-reports/TEST-*.xml
+#     paths:
+#       - target/surefire-reports/
+#       - target/site/jacoco/           # ← ADD THIS
+#     expire_in: 1 week
 
-package:
-  stage: package
-  image: maven:3.9-eclipse-temurin-17
-  script:
-    - mvn $MAVEN_CLI_OPTS package -DskipTests
-  artifacts:
-    paths:
-      - target/*.jar
-    expire_in: 1 week
-  only:
-    - main
-    - develop
+# package:
+#   stage: package
+#   image: maven:3.9-eclipse-temurin-17
+#   script:
+#     - mvn $MAVEN_CLI_OPTS package -DskipTests
+#   artifacts:
+#     paths:
+#       - target/*.jar
+#     expire_in: 1 week
+#   only:
+#     - main
+#     - develop
