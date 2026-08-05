@@ -39,8 +39,8 @@ export class WordlComponent implements OnInit {
             ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER']
         ],
         slovenian: [
-            ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Š','⌫'],
-            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Č'],
+            ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Š'],
+            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Č','⌫'],
             ['Y', 'X', 'C', 'V', 'B', 'N', 'M', 'Ž', 'ENTER']
         ],
         greek: [
