@@ -1,19 +1,27 @@
-<div *ngIf="isLoading" class="empty-row">
+@if (isLoading) {
+<div class="empty-row">
   Loading blog posts...
 </div>
+}
 
-<div *ngIf="!isLoading && blogPosts.length === 0" class="empty-row">
+@if (!isLoading && blogPosts.length === 0) {
+<div class="empty-row">
   No blog posts found.
 </div>
+}
 
-<div class="table-panel" *ngIf="!isLoading && blogPosts.length > 0">
+@if (!isLoading && blogPosts.length > 0) {
+<div class="table-panel">
   <div *ngFor="let post of blogPosts" class="post-card">
     <h2>{{ post.title }}</h2>
 
-    <img *ngIf="post.mediaType === 'image'" [src]="post.mediaUrl" style="max-width: 1000px; width: 100%;" />
+    @if (post.mediaType === 'image') {
+    <img [src]="post.mediaUrl" style="max-width: 1000px; width: 100%;" />
+    }
 
-    <video *ngIf="post.mediaType === 'video'" [src]="post.mediaUrl" controls
-      style="max-width: 500px; width: 100%;"></video>
+    @if (post.mediaType === 'video') {
+    <video [src]="post.mediaUrl" controls style="max-width: 500px; width: 100%;"></video>
+    }
 
     <p>{{ post.content }}</p>
 
@@ -22,7 +30,8 @@
     <div class="comments-section">
       <h3>Comments</h3>
 
-      <div class="comment-box" *ngIf="newComments[post.id]">
+      @if (newComments[post.id]) {
+      <div class="comment-box">
         <input type="text" placeholder="Your name" [(ngModel)]="newComments[post.id].authorName" />
 
         <textarea placeholder="Write a comment..." [(ngModel)]="newComments[post.id].commentText"></textarea>
@@ -31,6 +40,7 @@
           Post Comment
         </button>
       </div>
+      }
 
       <div class="comment-list">
         <div *ngFor="let comment of (commentsByPostId[post.id] || [])" class="comment-card">
@@ -58,3 +68,4 @@
     </div>
   </div>
 </div>
+}
