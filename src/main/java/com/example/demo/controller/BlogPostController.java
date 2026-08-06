@@ -27,6 +27,6 @@ public class BlogPostController {
 
     @GetMapping
     public List<BlogPost> getAllPosts() {
-        return repository.findAllOrderByCreatedOnDesc();
+        return repository.findAllByOrderByCreatedOnDesc();
     }
 }
