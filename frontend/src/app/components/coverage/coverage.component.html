@@ -1,13 +1,14 @@
 <div class="coverage-container">
   <div class="coverage-header">
     <h1>📊 JaCoCo Code Coverage Report (works locally after running mvn clean test)</h1>
+    @if (isLocal) {
     <div class="button-group">
       <a [href]="coverageReportUrl" target="_blank" class="direct-link-btn">
         🔗 View Full Report
       </a>
     </div>
+  }
   </div>
-
 
 
      <img src="assets/jacoco.png"
