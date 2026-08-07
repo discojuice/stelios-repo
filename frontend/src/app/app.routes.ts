@@ -10,7 +10,7 @@ import { ConverterComponent } from './components/converter/converter.component';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'project', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'requests', component: RequestsComponent },
