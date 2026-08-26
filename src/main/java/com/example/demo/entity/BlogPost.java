@@ -28,5 +28,5 @@ public class BlogPost {
 
     private LocalDateTime createdOn;
 
-    // getters and setters
+    private int groupId;
 }

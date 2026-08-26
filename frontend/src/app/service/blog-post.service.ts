@@ -2,15 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface BlogPost {
-  id: number;
-  title: string;
-  content: string;
-  mediaUrl: string;
-  mediaType: string;
-  createdOn: string;
-}
+import { BlogPost } from '../models/blog-post'; // adjust path to match your folder structure
 
 @Injectable({
   providedIn: 'root'

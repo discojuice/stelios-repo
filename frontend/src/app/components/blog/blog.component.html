@@ -4,24 +4,30 @@
 </div>
 }
 
-@if (!isLoading && blogPosts.length === 0) {
+@if (!isLoading && groupedPosts.length === 0) {
 <div class="empty-row">
   No blog posts found.
 </div>
 }
 
-@if (!isLoading && blogPosts.length > 0) {
+@if (!isLoading && groupedPosts.length > 0) {
 <div class="table-panel">
-  <div *ngFor="let post of blogPosts" class="post-card">
+  <div *ngFor="let post of groupedPosts" class="post-card">
     <h2>{{ post.title }}</h2>
 
-    @if (post.mediaType === 'image') {
-    <img [src]="post.mediaUrl" style="max-width: 1000px; width: 100%;" />
-    }
+    <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media?.length">
+      <div
+        class="media-thumb"
+        *ngFor="let m of post.media.slice(0, 5); let i = index"
+        (click)="openLightbox(post, i)">
+        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" />
+        <video *ngIf="m.mediaType === 'video'" [src]="m.mediaUrl"></video>
 
-    @if (post.mediaType === 'video') {
-    <video [src]="post.mediaUrl" controls style="max-width: 500px; width: 100%;"></video>
-    }
+        <div class="more-overlay" *ngIf="i === 4 && post.media.length > 5">
+          +{{ post.media.length - 5 }}
+        </div>
+      </div>
+    </div>
 
     <p>{{ post.content }}</p>
 
@@ -30,20 +36,24 @@
     <div class="comments-section">
       <h3>Comments</h3>
 
-      @if (newComments[post.id]) {
+      @if (newComments[post.groupId]) {
       <div class="comment-box">
-        <input type="text" placeholder="Your name" [(ngModel)]="newComments[post.id].authorName" />
+        <input type="text" placeholder="Your name" [(ngModel)]="newComments[post.groupId].authorName" />
 
-        <textarea placeholder="Write a comment..." [(ngModel)]="newComments[post.id].commentText"></textarea>
+        <textarea placeholder="Write a comment..." [(ngModel)]="newComments[post.groupId].commentText"></textarea>
 
-        <button class="main-btn" type="button" (click)="submitComment(post.id)">
+        <button class="main-btn" type="button" (click)="submitComment(post.groupId)">
           Post Comment
         </button>
       </div>
       }
 
+      @if (commentMessages[post.groupId]) {
+      <div class="comment-success">{{ commentMessages[post.groupId] }}</div>
+      }
+
       <div class="comment-list">
-        <div *ngFor="let comment of (commentsByPostId[post.id] || [])" class="comment-card">
+        <div *ngFor="let comment of (commentsByGroup[post.groupId] || [])" class="comment-card">
           <div class="comment-header">
             <div class="comment-avatar">
               {{ (comment.authorName || 'A').charAt(0).toUpperCase() }}
@@ -69,3 +79,21 @@
   </div>
 </div>
 }
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" *ngIf="lightboxPost" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">&times;</button>
+
+    <button class="lightbox-arrow left" *ngIf="lightboxPost.media.length > 1" (click)="prevMedia()">&#10094;</button>
+
+    <ng-container [ngSwitch]="lightboxPost.media[lightboxIndex].mediaType">
+      <img *ngSwitchCase="'image'" [src]="lightboxPost.media[lightboxIndex].mediaUrl" />
+      <video *ngSwitchCase="'video'" [src]="lightboxPost.media[lightboxIndex].mediaUrl" controls autoplay></video>
+    </ng-container>
+
+    <button class="lightbox-arrow right" *ngIf="lightboxPost.media.length > 1" (click)="nextMedia()">&#10095;</button>
+
+    <div class="lightbox-counter">{{ lightboxIndex + 1 }} / {{ lightboxPost.media.length }}</div>
+  </div>
+</div>
