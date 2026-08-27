@@ -13,19 +13,19 @@
         <button [class.active]="activeTab === 'currency'" (click)="activeTab = 'currency'">
             💰 Currency
         </button>
+
         <button [class.active]="activeTab === 'temperature'" (click)="activeTab = 'temperature'">
             🌡️ Temperature
         </button>
     </div>
 
-    <div class="converter-card" *ngIf="activeTab === 'temperature'">
-
+    @if (activeTab === 'temperature') {
+    <div class="converter-card">
         <h2>Temperature Converter</h2>
 
         <input type="number" [(ngModel)]="temperatureValue" />
 
         <div class="select-row">
-
             <select [(ngModel)]="temperatureFrom">
                 <option value="C">Celsius (°C)</option>
                 <option value="F">Fahrenheit (°F)</option>
@@ -39,20 +39,15 @@
                 <option value="C">Celsius (°C)</option>
                 <option value="F">Fahrenheit (°F)</option>
             </select>
-
         </div>
 
         <div class="result">
-            {{ temperatureValue }}
-            °{{ temperatureFrom }}
-            =
-            {{ temperatureResult | number:'1.0-2' }}
-            °{{ temperatureTo }}
+            {{ temperatureValue }} °{{ temperatureFrom }} =
+            {{ temperatureResult | number:'1.0-2' }} °{{ temperatureTo }}
         </div>
-
     </div>
-
-    <div class="converter-card" *ngIf="activeTab === 'size'">
+    } @else if (activeTab === 'size') {
+    <div class="converter-card">
         <h2>Size Converter</h2>
 
         <input type="number" [(ngModel)]="sizeValue" />
@@ -74,11 +69,12 @@
         </div>
 
         <div class="result">
-            {{ sizeValue }} {{ sizeFrom }} = {{ sizeResult | number:'1.0-4' }} {{ sizeTo }}
+            {{ sizeValue }} {{ sizeFrom }} =
+            {{ sizeResult | number:'1.0-4' }} {{ sizeTo }}
         </div>
     </div>
-
-    <div class="converter-card" *ngIf="activeTab === 'weight'">
+    } @else if (activeTab === 'weight') {
+    <div class="converter-card">
         <h2>Weight Converter</h2>
 
         <input type="number" [(ngModel)]="weightValue" />
@@ -100,11 +96,12 @@
         </div>
 
         <div class="result">
-            {{ weightValue }} {{ weightFrom }} = {{ weightResult | number:'1.0-4' }} {{ weightTo }}
+            {{ weightValue }} {{ weightFrom }} =
+            {{ weightResult | number:'1.0-4' }} {{ weightTo }}
         </div>
     </div>
-
-    <div class="converter-card" *ngIf="activeTab === 'currency'">
+    } @else if (activeTab === 'currency') {
+    <div class="converter-card">
         <h2>Currency Converter</h2>
 
         <input type="number" [(ngModel)]="currencyValue" />
@@ -130,6 +127,9 @@
             {{ currencyResult | number:'1.0-2' }} {{ currencyTo }}
         </div>
 
-        <small>Rates are static for now. You can connect them to an API later.</small>
+        <small>
+            Rates are static for now. You can connect them to an API later.
+        </small>
     </div>
+    }
 </div>

@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 })
 export class CoverageComponent implements OnInit {
   isLoading = true;
+  readonly isLocal = !environment.production;
   errorMessage: string | null = null;
   coverageStatus: any = null;
   // apiUrl = 'http://localhost:8080/api/coverage';

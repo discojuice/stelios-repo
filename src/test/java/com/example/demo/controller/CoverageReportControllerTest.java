@@ -9,8 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -78,8 +76,8 @@ class CoverageReportControllerTest {
     @Test
     void testCorsHeadersForLocalhost4200() throws Exception {
         mockMvc.perform(options("/api/coverage-report")
-                        .header("Origin", "http://localhost:4200")
-                        .header("Access-Control-Request-Method", "GET"))
+                .header("Origin", "http://localhost:4200")
+                .header("Access-Control-Request-Method", "GET"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:4200"));
     }
@@ -87,8 +85,8 @@ class CoverageReportControllerTest {
     @Test
     void testCorsHeadersForLocalhost3000() throws Exception {
         mockMvc.perform(options("/api/coverage-report")
-                        .header("Origin", "http://localhost:3000")
-                        .header("Access-Control-Request-Method", "GET"))
+                .header("Origin", "http://localhost:3000")
+                .header("Access-Control-Request-Method", "GET"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:3000"));
     }
@@ -96,8 +94,8 @@ class CoverageReportControllerTest {
     @Test
     void testCorsHeadersForRenderFrontend() throws Exception {
         mockMvc.perform(options("/api/coverage-report")
-                        .header("Origin", "https://myproject-1-vf3w.onrender.com")
-                        .header("Access-Control-Request-Method", "GET"))
+                .header("Origin", "https://myproject-1-vf3w.onrender.com")
+                .header("Access-Control-Request-Method", "GET"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "https://myproject-1-vf3w.onrender.com"));
     }
@@ -107,7 +105,7 @@ class CoverageReportControllerTest {
         Files.deleteIfExists(REPORT_FILE);
 
         mockMvc.perform(get("/api/coverage-report")
-                        .header("Origin", "https://myproject-1-vf3w.onrender.com"))
+                .header("Origin", "https://myproject-1-vf3w.onrender.com"))
                 .andExpect(status().isNotFound())
                 .andExpect(header().string("Access-Control-Allow-Origin", "https://myproject-1-vf3w.onrender.com"));
     }
@@ -118,7 +116,7 @@ class CoverageReportControllerTest {
         Files.writeString(REPORT_FILE, "<html><body>Prod CORS Test</body></html>");
 
         mockMvc.perform(get("/api/coverage-report/html")
-                        .header("Origin", "https://myproject-1-vf3w.onrender.com"))
+                .header("Origin", "https://myproject-1-vf3w.onrender.com"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "https://myproject-1-vf3w.onrender.com"))
                 .andExpect(content().string(containsString("Prod CORS Test")));
