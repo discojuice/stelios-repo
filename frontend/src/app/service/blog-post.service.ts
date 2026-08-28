@@ -13,10 +13,6 @@ export class BlogPostService {
 
   constructor(private http: HttpClient) { }
 
-  getPosts(): Observable<BlogPost[]> {
-    return this.http.get<BlogPost[]>(this.apiUrl);
-  }
-
   getPost(id: number): Observable<BlogPost> {
     return this.http.get<BlogPost>(`${this.apiUrl}/${id}`);
   }
@@ -32,4 +28,9 @@ export class BlogPostService {
   deletePost(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  // blog-post.service.ts
+  getPosts(page: number, size: number = 5): Observable<BlogPost[]> {
+  return this.http.get<BlogPost[]>(`${this.apiUrl}?page=${page}&size=${size}`);
+}
 }

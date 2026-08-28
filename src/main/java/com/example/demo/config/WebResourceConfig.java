@@ -15,7 +15,7 @@ public class WebResourceConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Get the absolute path to target/site/jacoco
         String jacocoPath = Paths.get("target/site/jacoco").toAbsolutePath().toString();
-        
+
         // Serve JaCoCo coverage reports from target/site/jacoco
         registry.addResourceHandler("/coverage/**")
                 .addResourceLocations("file:" + jacocoPath + "/");
