@@ -12,15 +12,12 @@
 
 @if (!isLoading && groupedPosts.length > 0) {
 <div class="table-panel">
-  <div *ngFor="let post of groupedPosts" class="post-card">
+  <div *ngFor="let post of groupedPosts; trackBy: trackByGroup" class="post-card">
     <h2>{{ post.title }}</h2>
 
     <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media?.length">
-      <div
-        class="media-thumb"
-        *ngFor="let m of post.media.slice(0, 5); let i = index"
-        (click)="openLightbox(post, i)">
-        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" />
+      <div class="media-thumb" *ngFor="let m of post.media.slice(0, 5); let i = index" (click)="openLightbox(post, i)">
+        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" loading="lazy" />
         <video *ngIf="m.mediaType === 'video'" [src]="m.mediaUrl"></video>
 
         <div class="more-overlay" *ngIf="i === 4 && post.media.length > 5">
@@ -42,7 +39,7 @@
 
         <textarea placeholder="Write a comment..." [(ngModel)]="newComments[post.groupId].commentText"></textarea>
 
-        <button class="main-btn" type="button" (click)="submitComment(post.groupId)">
+        <button class="main-btn" type="button" (click)="submitComment(post.groupId, post.representativeId)">
           Post Comment
         </button>
       </div>
@@ -78,6 +75,16 @@
     </div>
   </div>
 </div>
+
+<div #scrollAnchor class="scroll-anchor"></div>
+
+@if (isLoadingMore) {
+<div class="empty-row">Loading more...</div>
+}
+
+@if (!hasMore && groupedPosts.length > 0) {
+<div class="empty-row">You've reached the end.</div>
+}
 }
 
 <!-- Lightbox -->

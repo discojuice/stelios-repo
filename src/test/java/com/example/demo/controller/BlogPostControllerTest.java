@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.BlogPost;
-import com.example.demo.repository.BlogPostRepository;
+import com.example.demo.service.BlogPostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BlogPostControllerTest {
 
     @Mock
-    private BlogPostRepository blogPostRepository;
+    private BlogPostService blogPostService;
 
     @InjectMocks
     private BlogPostController blogPostController;
@@ -42,55 +42,76 @@ class BlogPostControllerTest {
         testBlogPost.setTitle("Test Blog Post");
         testBlogPost.setContent("This is test content");
         testBlogPost.setMediaUrl("http://example.com/image.jpg");
-        testBlogPost.setMediaType("image/jpeg");
+        testBlogPost.setMediaType("image");
         testBlogPost.setCreatedOn(LocalDateTime.now());
+        testBlogPost.setGroupId(1);
     }
 
     @Test
-    void testGetAllPosts() throws Exception {
+    void testGetPosts() throws Exception {
         List<BlogPost> posts = List.of(testBlogPost);
-        when(blogPostRepository.findAll()).thenReturn(posts);
+        when(blogPostService.getPostsPage(0, 5)).thenReturn(posts);
 
         mockMvc.perform(get("/api/blog-posts")
+                .param("page", "0")
+                .param("size", "5")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].title").value("Test Blog Post"));
 
-        verify(blogPostRepository, times(1)).findAll();
+        verify(blogPostService, times(1)).getPostsPage(0, 5);
     }
 
     @Test
-    void testGetAllPosts_Empty() throws Exception {
-        when(blogPostRepository.findAll()).thenReturn(new ArrayList<>());
+    void testGetPosts_Empty() throws Exception {
+        when(blogPostService.getPostsPage(0, 5)).thenReturn(new ArrayList<>());
 
         mockMvc.perform(get("/api/blog-posts")
+                .param("page", "0")
+                .param("size", "5")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(blogPostRepository, times(1)).findAll();
+        verify(blogPostService, times(1)).getPostsPage(0, 5);
     }
 
     @Test
-    void testGetAllPosts_Multiple() throws Exception {
+    void testGetPosts_Multiple() throws Exception {
         BlogPost post2 = new BlogPost();
         post2.setId(2L);
         post2.setTitle("Another Blog Post");
         post2.setContent("More content");
         post2.setCreatedOn(LocalDateTime.now());
+        post2.setGroupId(2);
 
         List<BlogPost> posts = List.of(testBlogPost, post2);
-        when(blogPostRepository.findAll()).thenReturn(posts);
+        when(blogPostService.getPostsPage(0, 5)).thenReturn(posts);
 
         mockMvc.perform(get("/api/blog-posts")
+                .param("page", "0")
+                .param("size", "5")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].title").value("Test Blog Post"))
                 .andExpect(jsonPath("$[1].title").value("Another Blog Post"));
 
-        verify(blogPostRepository, times(1)).findAll();
+        verify(blogPostService, times(1)).getPostsPage(0, 5);
+    }
+
+    @Test
+    void testGetPosts_UsesDefaultPageAndSize() throws Exception {
+        when(blogPostService.getPostsPage(0, 5)).thenReturn(List.of(testBlogPost));
+
+        // no page/size params - controller should apply defaults (0, 5)
+        mockMvc.perform(get("/api/blog-posts")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        verify(blogPostService, times(1)).getPostsPage(0, 5);
     }
 }
