@@ -15,11 +15,16 @@
 }
 
 .post-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   padding: 16px;
   box-sizing: border-box;
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .post-card h2 {
@@ -34,6 +39,7 @@
   border-radius: 8px;
   overflow: hidden;
   height: 400px;
+  contain: layout style paint;
 }
 
 .media-preview-grid.count-1 {
@@ -79,6 +85,7 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
+  contain: layout style paint;
 }
 
 .media-thumb img,
@@ -87,6 +94,19 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.media-thumb img {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  /* Placeholder pattern while loading */
+  position: relative;
+}
+
+.media-thumb video {
+  /* Ensures poster image shows properly */
+  background-color: #111;
 }
 
 .more-overlay {
