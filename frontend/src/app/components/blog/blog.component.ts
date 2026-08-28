@@ -4,14 +4,15 @@ import { BlogPost, GroupedPost } from '../../models/blog-post';
 import { BlogComment } from '../../models/blog-comment';
 import { BlogCommentService } from '../../service/blog-comment.service';
 import { FormsModule } from '@angular/forms';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-blog',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css']
+  styleUrls: ['./blog.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogComponent implements OnInit, AfterViewInit, OnDestroy {
 
