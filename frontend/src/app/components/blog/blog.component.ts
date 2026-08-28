@@ -13,7 +13,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, 
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css']
 })
-export class BlogComponent implements OnInit {
+export class BlogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   groupedPosts: GroupedPost[] = [];
   commentsByGroup: { [group: number]: BlogComment[] } = {};
@@ -24,7 +24,7 @@ export class BlogComponent implements OnInit {
   isLoadingMore = false;
   hasMore = true;
   page = 0;
-  pageSize = 5;
+  pageSize = typeof window !== 'undefined' && window.innerWidth < 768 ? 3 : 5;
 
   lightboxPost: GroupedPost | null = null;
   lightboxIndex = 0;
@@ -46,8 +46,8 @@ export class BlogComponent implements OnInit {
   }
 
   private setupObserver(): void {
-    if (!this.scrollAnchor?.nativeElement) {
-      return; // anchor not in DOM yet (e.g. no posts loaded) - skip safely
+    if (!this.scrollAnchor?.nativeElement || this.observer) {
+      return;
     }
 
     this.observer = new IntersectionObserver(entries => {
@@ -65,6 +65,7 @@ export class BlogComponent implements OnInit {
 
   loadPage(): void {
     const loadingFirstPage = this.page === 0;
+
     if (loadingFirstPage) {
       this.isLoading = true;
     } else {
@@ -80,7 +81,7 @@ export class BlogComponent implements OnInit {
           this.groupedPosts = [...this.groupedPosts, ...newGroups];
 
           newGroups.forEach(group => {
-            this.loadComments(group.groupId, group.representativeId); // <-- pass both
+            this.loadComments(group.groupId, group.representativeId);
             this.newComments[group.groupId] = { authorName: '', commentText: '' };
           });
 
@@ -131,11 +132,11 @@ export class BlogComponent implements OnInit {
         this.newComments[groupId] = { authorName: '', commentText: '' };
         this.commentMessages[groupId] = 'Comment added successfully.';
 
-        this.cdr.detectChanges(); // <-- add this: forces the view to update immediately
+        this.cdr.detectChanges();
 
         setTimeout(() => {
           this.commentMessages[groupId] = '';
-          this.cdr.detectChanges(); // <-- also needed so the success message actually disappears without a refresh
+          this.cdr.detectChanges();
         }, 3000);
       },
       error: err => console.error(err)
@@ -162,12 +163,10 @@ export class BlogComponent implements OnInit {
 
       grouped.media.push({ mediaUrl: post.mediaUrl, mediaType: post.mediaType });
 
-      // keep the earliest id as the representative (in case rows aren't inserted in order)
       if (post.id < grouped.representativeId) {
         grouped.representativeId = post.id;
       }
 
-      // prefer non-empty content if the first row happened to have none
       if (!grouped.content && post.content) {
         grouped.content = post.content;
       }
@@ -177,7 +176,6 @@ export class BlogComponent implements OnInit {
       (a, b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()
     );
   }
-
 
   mediaGridClass(post: GroupedPost): string {
     return 'count-' + Math.min(post.media.length, 5);
