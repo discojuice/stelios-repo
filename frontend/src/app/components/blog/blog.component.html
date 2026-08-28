@@ -12,7 +12,7 @@
 <div class="table-panel">
   <div *ngFor="let post of groupedPosts; trackBy: trackByGroup" class="post-card">
     <h2>{{ post.title }}</h2>
-    <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media?.length">
+    <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media.length">
       <div class="media-thumb" *ngFor="let m of post.media.slice(0, 5); let i = index" (click)="openLightbox(post, i)">
         <img *ngIf="m.mediaType === 'image'" 
           [src]="m.mediaUrl" 
