@@ -144,6 +144,13 @@ export class BlogComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/image-placeholder.svg';
+    img.style.opacity = '0.5';
+    console.warn('Image failed to load:', img.src);
+  }
+
   private groupPosts(posts: BlogPost[]): GroupedPost[] {
     const map = new Map<number, GroupedPost>();
 
@@ -162,7 +169,7 @@ export class BlogComponent implements OnInit, AfterViewInit, OnDestroy {
         map.set(post.groupId, grouped);
       }
 
-      grouped.media.push({ mediaUrl: post.mediaUrl, mediaType: post.mediaType });
+      grouped.media.push({ mediaUrl: post.mediaUrl, mediaType: post.mediaType, posterUrl: post.posterUrl });
 
       if (post.id < grouped.representativeId) {
         grouped.representativeId = post.id;

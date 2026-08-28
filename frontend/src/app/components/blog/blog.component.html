@@ -14,9 +14,17 @@
     <h2>{{ post.title }}</h2>
     <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media?.length">
       <div class="media-thumb" *ngFor="let m of post.media.slice(0, 5); let i = index" (click)="openLightbox(post, i)">
-        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" loading="lazy" decoding="async" width="400"
+        <img *ngIf="m.mediaType === 'image'" 
+          [src]="m.mediaUrl" 
+          (error)="onImageError($event)"
+          loading="lazy" 
+          decoding="async" 
+          width="400"
           height="400" />
-        <video *ngIf="m.mediaType === 'video'" [src]="m.mediaUrl" preload="none"></video>
+        <video *ngIf="m.mediaType === 'video'" 
+          [src]="m.mediaUrl" 
+          [poster]="m.posterUrl || 'assets/video-placeholder.svg'"
+          preload="none"></video>
         <div class="more-overlay" *ngIf="i === 4 && post.media.length > 5">
           +{{ post.media.length - 5 }}
         </div>
