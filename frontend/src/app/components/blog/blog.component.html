@@ -20,7 +20,7 @@
         class="media-thumb"
         *ngFor="let m of post.media.slice(0, 5); let i = index"
         (click)="openLightbox(post, i)">
-        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" />
+        <img *ngIf="m.mediaType === 'image'" [src]="m.mediaUrl" loading="lazy" decoding="async" />
         <video *ngIf="m.mediaType === 'video'" [src]="m.mediaUrl"></video>
 
         <div class="more-overlay" *ngIf="i === 4 && post.media.length > 5">
@@ -88,7 +88,7 @@
     <button class="lightbox-arrow left" *ngIf="lightboxPost.media.length > 1" (click)="prevMedia()">&#10094;</button>
 
     <ng-container [ngSwitch]="lightboxPost.media[lightboxIndex].mediaType">
-      <img *ngSwitchCase="'image'" [src]="lightboxPost.media[lightboxIndex].mediaUrl" />
+      <img *ngSwitchCase="'image'" [src]="lightboxPost.media[lightboxIndex].mediaUrl" loading="lazy" decoding="async" />
       <video *ngSwitchCase="'video'" [src]="lightboxPost.media[lightboxIndex].mediaUrl" controls autoplay></video>
     </ng-container>
 

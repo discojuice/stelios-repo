@@ -20,6 +20,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   padding: 16px;
   box-sizing: border-box;
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .post-card h2 {
@@ -34,6 +37,7 @@
   border-radius: 8px;
   overflow: hidden;
   height: 400px;
+  contain: layout style paint;
 }
 
 .media-preview-grid.count-1 {
@@ -79,6 +83,7 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
+  contain: layout style paint;
 }
 
 .media-thumb img,
@@ -87,6 +92,8 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .more-overlay {

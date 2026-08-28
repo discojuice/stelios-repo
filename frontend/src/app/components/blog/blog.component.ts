@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlogPostService } from '../../service/blog-post.service';
 import { BlogPost, GroupedPost } from '../../models/blog-post';
@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css']
+  styleUrls: ['./blog.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogComponent implements OnInit {
 
@@ -28,8 +29,7 @@ export class BlogComponent implements OnInit {
 
   constructor(
     private blogPostService: BlogPostService,
-    private blogCommentService: BlogCommentService,
-    private cdr: ChangeDetectorRef) { }
+    private blogCommentService: BlogCommentService) { }
 
   ngOnInit(): void {
     this.blogPostService.getPosts().subscribe({
@@ -41,13 +41,10 @@ export class BlogComponent implements OnInit {
           this.loadComments(group.groupId);
           this.newComments[group.groupId] = { authorName: '', commentText: '' };
         });
-
-        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('error fired:', err);
         this.isLoading = false;
-        this.cdr.detectChanges();
       }
     });
   }
@@ -93,7 +90,6 @@ export class BlogComponent implements OnInit {
     this.blogCommentService.getComments(group).subscribe({
       next: data => {
         this.commentsByGroup[group] = data;
-        this.cdr.detectChanges();
       },
       error: err => console.error('COMMENTS ERROR', err)
     });
