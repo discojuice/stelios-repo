@@ -144,11 +144,21 @@ export class BlogComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  onMediaLoaded(event: Event): void {
+    (event.target as HTMLElement).classList.add('loaded');
+  }
+
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'assets/image-placeholder.svg';
-    img.style.opacity = '0.5';
     console.warn('Image failed to load:', img.src);
+    img.onerror = null;
+    img.src = '/image-placeholder.svg';
+    img.classList.add('loaded', 'errored');
+  }
+
+  // A time fragment makes the browser fetch and paint the first frame as the preview.
+  videoPreviewSrc(url: string): string {
+    return url.includes('#') ? url : url + '#t=0.1';
   }
 
   private groupPosts(posts: BlogPost[]): GroupedPost[] {

@@ -80,12 +80,19 @@
   position: relative;
   cursor: pointer;
   overflow: hidden;
-  background: #111;
+  background: linear-gradient(100deg, #eceff1 30%, #f7f8f9 50%, #eceff1 70%);
+  background-size: 300% 100%;
+  animation: thumb-shimmer 1.4s ease-in-out infinite;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
   contain: layout style paint;
+}
+
+@keyframes thumb-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
 }
 
 .media-thumb img,
@@ -94,19 +101,45 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  backface-visibility: hidden;
-  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.media-thumb img {
-  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-  /* Placeholder pattern while loading */
-  position: relative;
+.media-thumb img.loaded,
+.media-thumb video.loaded {
+  opacity: 1;
 }
 
-.media-thumb video {
-  /* Ensures poster image shows properly */
-  background-color: #111;
+.media-thumb:has(> .loaded) {
+  animation: none;
+}
+
+.media-thumb img.errored {
+  object-fit: contain;
+  opacity: 0.5;
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 4px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-thumb { animation: none; }
 }
 
 .more-overlay {
