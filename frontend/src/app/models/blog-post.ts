@@ -15,5 +15,12 @@ export interface GroupedPost {
   title: string;
   content: string;
   createdOn: string;
-  media: { mediaUrl: string; mediaType: 'image' | 'video'; posterUrl?: string }[];
+  media: GroupedMedia[];
+}
+
+export interface GroupedMedia {
+  mediaUrl: string;
+  mediaType: 'image' | 'video';
+  // Small preview shown in the grid; the full mediaUrl is only loaded in the lightbox.
+  thumbUrl: string;
 }
