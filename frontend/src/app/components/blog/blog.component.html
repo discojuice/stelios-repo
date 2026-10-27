@@ -10,6 +10,7 @@
 }
 @if (!isLoading && groupedPosts.length > 0) {
 <div class="table-panel">
+  All fish except a couple of trouts have been released back in the water !
   <div *ngFor="let post of groupedPosts; trackBy: trackByGroup" class="post-card">
     <h2>{{ post.title }}</h2>
     <div class="media-preview-grid" [ngClass]="mediaGridClass(post)" *ngIf="post.media.length">
